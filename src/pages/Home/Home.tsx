@@ -1,15 +1,12 @@
-// Home.tsx
 import React from 'react';
-import { Box, Heading } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
+import Hero from './HomeComponents/Hero';
 
 const Home: React.FC = () => {
   return (
     <Box p={4}>
-      <Heading as="h1" size="xl" mb={4}>
-        Bienvenue sur notre plateforme de prise de rendez-vous médicaux !
-      </Heading>
+        <Hero/>
     </Box>
   );
 };
-
 export default Home;
