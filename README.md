@@ -57,3 +57,42 @@ You can learn more in the
 [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+src/
+|-- assets/
+|   |-- images/
+|   |   |-- logo.png
+|   |-- styles/
+|   |   |-- globalStyles.css
+|-- components/
+|   |-- Button/
+|   |   |-- Button.tsx
+|   |   |-- Button.styles.ts
+|   |-- Card/
+|   |   |-- Card.tsx
+|   |   |-- Card.styles.ts
+|   |-- ...
+|-- contexts/
+|   |-- AuthContext.tsx
+|   |-- ...
+|-- hooks/
+|   |-- useApi.ts
+|   |-- ...
+|-- pages/
+|   |-- Home/
+|   |   |-- Home.tsx
+|   |   |-- Home.styles.ts
+|   |-- Login/
+|   |   |-- Login.tsx
+|   |   |-- Login.styles.ts
+|   |-- ...
+|-- services/
+|   |-- api.ts
+|-- utils/
+|   |-- formatDate.ts
+|   |-- ...
+|-- theme.ts
+|-- App.tsx
+|-- index.tsx
+|-- routes.tsx
