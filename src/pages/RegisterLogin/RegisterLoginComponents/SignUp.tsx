@@ -1,212 +1,348 @@
 'use client'
 
+import { useState } from 'react'
 import {
+  Progress,
   Box,
-  Flex,
-  Stack,
-  Heading,
-  Text,
-  Container,
-  Input,
+  ButtonGroup,
   Button,
+  Heading,
+  Flex,
+  FormControl,
+  GridItem,
+  FormLabel,
+  Input,
+  Select,
   SimpleGrid,
-  Avatar,
-  AvatarGroup,
-  useBreakpointValue,
-  IconProps,
-  Icon,
+  InputLeftAddon,
+  InputGroup,
+  Textarea,
+  FormHelperText,
+  InputRightElement,
 } from '@chakra-ui/react'
 
-const avatars = [
-  {
-    name: 'Ryan Florence',
-    url: 'https://bit.ly/ryan-florence',
-  },
-  {
-    name: 'Segun Adebayo',
-    url: 'https://bit.ly/sage-adebayo',
-  },
-  {
-    name: 'Kent Dodds',
-    url: 'https://bit.ly/kent-c-dodds',
-  },
-  {
-    name: 'Prosper Otemuyiwa',
-    url: 'https://bit.ly/prosper-baba',
-  },
-  {
-    name: 'Christian Nwamba',
-    url: 'https://bit.ly/code-beast',
-  },
-]
+import { useToast } from '@chakra-ui/react'
 
-const Blur = (props: IconProps) => {
+const Form1 = () => {
+  const [show, setShow] = useState(false)
+  const handleClick = () => setShow(!show)
   return (
-    <Icon
-      width={useBreakpointValue({ base: '100%', md: '40vw', lg: '30vw' })}
-      zIndex={useBreakpointValue({ base: -1, md: -1, lg: 0 })}
-      height="560px"
-      viewBox="0 0 528 560"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}>
-      <circle cx="71" cy="61" r="111" fill="#F56565" />
-      <circle cx="244" cy="106" r="139" fill="#ED64A6" />
-      <circle cy="291" r="139" fill="#ED64A6" />
-      <circle cx="80.5" cy="189.5" r="101.5" fill="#ED8936" />
-      <circle cx="196.5" cy="317.5" r="101.5" fill="#ECC94B" />
-      <circle cx="70.5" cy="458.5" r="101.5" fill="#48BB78" />
-      <circle cx="426.5" cy="-0.5" r="101.5" fill="#4299E1" />
-    </Icon>
+    <>
+      <Heading w="100%" textAlign={'center'} fontWeight="normal" mb="2%">
+        User Registration
+      </Heading>
+      <Flex>
+        <FormControl mr="5%">
+          <FormLabel htmlFor="first-name" fontWeight={'normal'}>
+            First name
+          </FormLabel>
+          <Input id="first-name" placeholder="First name" />
+        </FormControl>
+
+        <FormControl>
+          <FormLabel htmlFor="last-name" fontWeight={'normal'}>
+            Last name
+          </FormLabel>
+          <Input id="last-name" placeholder="First name" />
+        </FormControl>
+      </Flex>
+      <FormControl mt="2%">
+        <FormLabel htmlFor="email" fontWeight={'normal'}>
+          Email address
+        </FormLabel>
+        <Input id="email" type="email" />
+        <FormHelperText>We&apos;ll never share your email.</FormHelperText>
+      </FormControl>
+
+      <FormControl>
+        <FormLabel htmlFor="password" fontWeight={'normal'} mt="2%">
+          Password
+        </FormLabel>
+        <InputGroup size="md">
+          <Input
+            pr="4.5rem"
+            type={show ? 'text' : 'password'}
+            placeholder="Enter password"
+          />
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" onClick={handleClick}>
+              {show ? 'Hide' : 'Show'}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+      </FormControl>
+    </>
+  )
+}
+
+const Form2 = () => {
+  return (
+    <>
+      <Heading w="100%" textAlign={'center'} fontWeight="normal" mb="2%">
+        User Details
+      </Heading>
+      <FormControl as={GridItem} colSpan={[6, 3]}>
+        <FormLabel
+          htmlFor="country"
+          fontSize="sm"
+          fontWeight="md"
+          color="gray.700"
+          _dark={{
+            color: 'gray.50',
+          }}>
+          Country / Region
+        </FormLabel>
+        <Select
+          id="country"
+          name="country"
+          autoComplete="country"
+          placeholder="Select option"
+          focusBorderColor="brand.400"
+          shadow="sm"
+          size="sm"
+          w="full"
+          rounded="md">
+          <option>United States</option>
+          <option>Canada</option>
+          <option>Mexico</option>
+        </Select>
+      </FormControl>
+
+      <FormControl as={GridItem} colSpan={6}>
+        <FormLabel
+          htmlFor="street_address"
+          fontSize="sm"
+          fontWeight="md"
+          color="gray.700"
+          _dark={{
+            color: 'gray.50',
+          }}
+          mt="2%">
+          Street address
+        </FormLabel>
+        <Input
+          type="text"
+          name="street_address"
+          id="street_address"
+          autoComplete="street-address"
+          focusBorderColor="brand.400"
+          shadow="sm"
+          size="sm"
+          w="full"
+          rounded="md"
+        />
+      </FormControl>
+
+      <FormControl as={GridItem} colSpan={[6, 6, null, 2]}>
+        <FormLabel
+          htmlFor="city"
+          fontSize="sm"
+          fontWeight="md"
+          color="gray.700"
+          _dark={{
+            color: 'gray.50',
+          }}
+          mt="2%">
+          City
+        </FormLabel>
+        <Input
+          type="text"
+          name="city"
+          id="city"
+          autoComplete="city"
+          focusBorderColor="brand.400"
+          shadow="sm"
+          size="sm"
+          w="full"
+          rounded="md"
+        />
+      </FormControl>
+
+      <FormControl as={GridItem} colSpan={[6, 3, null, 2]}>
+        <FormLabel
+          htmlFor="state"
+          fontSize="sm"
+          fontWeight="md"
+          color="gray.700"
+          _dark={{
+            color: 'gray.50',
+          }}
+          mt="2%">
+          State / Province
+        </FormLabel>
+        <Input
+          type="text"
+          name="state"
+          id="state"
+          autoComplete="state"
+          focusBorderColor="brand.400"
+          shadow="sm"
+          size="sm"
+          w="full"
+          rounded="md"
+        />
+      </FormControl>
+
+      <FormControl as={GridItem} colSpan={[6, 3, null, 2]}>
+        <FormLabel
+          htmlFor="postal_code"
+          fontSize="sm"
+          fontWeight="md"
+          color="gray.700"
+          _dark={{
+            color: 'gray.50',
+          }}
+          mt="2%">
+          ZIP / Postal
+        </FormLabel>
+        <Input
+          type="text"
+          name="postal_code"
+          id="postal_code"
+          autoComplete="postal-code"
+          focusBorderColor="brand.400"
+          shadow="sm"
+          size="sm"
+          w="full"
+          rounded="md"
+        />
+      </FormControl>
+    </>
+  )
+}
+
+const Form3 = () => {
+  return (
+    <>
+      <Heading w="100%" textAlign={'center'} fontWeight="normal">
+        Social Handles
+      </Heading>
+      <SimpleGrid columns={1} spacing={6}>
+        <FormControl as={GridItem} colSpan={[3, 2]}>
+          <FormLabel
+            fontSize="sm"
+            fontWeight="md"
+            color="gray.700"
+            _dark={{
+              color: 'gray.50',
+            }}>
+            Website
+          </FormLabel>
+          <InputGroup size="sm">
+            <InputLeftAddon
+              bg="gray.50"
+              _dark={{
+                bg: 'gray.800',
+              }}
+              color="gray.500"
+              rounded="md">
+              http://
+            </InputLeftAddon>
+            <Input
+              type="tel"
+              placeholder="www.example.com"
+              focusBorderColor="brand.400"
+              rounded="md"
+            />
+          </InputGroup>
+        </FormControl>
+
+        <FormControl id="email" mt={1}>
+          <FormLabel
+            fontSize="sm"
+            fontWeight="md"
+            color="gray.700"
+            _dark={{
+              color: 'gray.50',
+            }}>
+            About
+          </FormLabel>
+          <Textarea
+            placeholder="you@example.com"
+            rows={3}
+            shadow="sm"
+            focusBorderColor="brand.400"
+            fontSize={{
+              sm: 'sm',
+            }}
+          />
+          <FormHelperText>
+            Brief description for your profile. URLs are hyperlinked.
+          </FormHelperText>
+        </FormControl>
+      </SimpleGrid>
+    </>
   )
 }
 
 export default function SignUp() {
+  const toast = useToast()
+  const [step, setStep] = useState(1)
+  const [progress, setProgress] = useState(33.33)
+
   return (
-    <Box position={'relative'}>
-      <Container
-        as={SimpleGrid}
-        maxW={'7xl'}
-        columns={{ base: 1, md: 2 }}
-        spacing={{ base: 10, lg: 32 }}
-        py={{ base: 10, sm: 20, lg: 32 }}>
-        <Stack spacing={{ base: 10, md: 20 }}>
-          <Heading
-            lineHeight={1.1}
-            fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}>
-            Senior web designers{' '}
-            <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">
-              &
-            </Text>{' '}
-            Full-Stack Developers
-          </Heading>
-          <Stack direction={'row'} spacing={4} align={'center'}>
-            <AvatarGroup>
-              {avatars.map((avatar) => (
-                <Avatar
-                  key={avatar.name}
-                  name={avatar.name}
-                  src={avatar.url}
-                  // eslint-disable-next-line react-hooks/rules-of-hooks
-                  size={useBreakpointValue({ base: 'md', md: 'lg' })}
-                  position={'relative'}
-                  zIndex={2}
-                  _before={{
-                    content: '""',
-                    width: 'full',
-                    height: 'full',
-                    rounded: 'full',
-                    transform: 'scale(1.125)',
-                    bgGradient: 'linear(to-bl, red.400,pink.400)',
-                    position: 'absolute',
-                    zIndex: -1,
-                    top: 0,
-                    left: 0,
-                  }}
-                />
-              ))}
-            </AvatarGroup>
-            <Text fontFamily={'heading'} fontSize={{ base: '4xl', md: '6xl' }}>
-              +
-            </Text>
-            <Flex
-              align={'center'}
-              justify={'center'}
-              fontFamily={'heading'}
-              fontSize={{ base: 'sm', md: 'lg' }}
-              bg={'gray.800'}
-              color={'white'}
-              rounded={'full'}
-              minWidth={useBreakpointValue({ base: '44px', md: '60px' })}
-              minHeight={useBreakpointValue({ base: '44px', md: '60px' })}
-              position={'relative'}
-              _before={{
-                content: '""',
-                width: 'full',
-                height: 'full',
-                rounded: 'full',
-                transform: 'scale(1.125)',
-                bgGradient: 'linear(to-bl, orange.400,yellow.400)',
-                position: 'absolute',
-                zIndex: -1,
-                top: 0,
-                left: 0,
-              }}>
-              YOU
-            </Flex>
-          </Stack>
-        </Stack>
-        <Stack
-          bg={'gray.50'}
-          rounded={'xl'}
-          p={{ base: 4, sm: 6, md: 8 }}
-          spacing={{ base: 8 }}
-          maxW={{ lg: 'lg' }}>
-          <Stack spacing={4}>
-            <Heading
-              color={'gray.800'}
-              lineHeight={1.1}
-              fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
-              Join our team
-              <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">
-                !
-              </Text>
-            </Heading>
-            <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-              We’re looking for amazing engineers just like you! Become a part of our
-              rockstar engineering team and skyrocket your career!
-            </Text>
-          </Stack>
-          <Box as={'form'} mt={10}>
-            <Stack spacing={4}>
-              <Input
-                placeholder="Firstname"
-                bg={'gray.100'}
-                border={0}
-                color={'gray.500'}
-                _placeholder={{
-                  color: 'gray.500',
+    <>
+      <Box
+        borderWidth="1px"
+        rounded="lg"
+        shadow="1px 1px 3px rgba(0,0,0,0.3)"
+        maxWidth={800}
+        p={6}
+        m="10px auto"
+        as="form">
+        <Progress hasStripe value={progress} mb="5%" mx="5%" isAnimated></Progress>
+        {step === 1 ? <Form1 /> : step === 2 ? <Form2 /> : <Form3 />}
+        <ButtonGroup mt="5%" w="100%">
+          <Flex w="100%" justifyContent="space-between">
+            <Flex>
+              <Button
+                onClick={() => {
+                  setStep(step - 1)
+                  setProgress(progress - 33.33)
                 }}
-              />
-              <Input
-                placeholder="firstname@lastname.io"
-                bg={'gray.100'}
-                border={0}
-                color={'gray.500'}
-                _placeholder={{
-                  color: 'gray.500',
-                }}
-              />
-              <Input
-                placeholder="+1 (___) __-___-___"
-                bg={'gray.100'}
-                border={0}
-                color={'gray.500'}
-                _placeholder={{
-                  color: 'gray.500',
-                }}
-              />
-              <Button fontFamily={'heading'} bg={'gray.200'} color={'gray.800'}>
-                Upload CV
+                isDisabled={step === 1}
+                colorScheme="teal"
+                variant="solid"
+                w="7rem"
+                mr="5%">
+                Back
               </Button>
-            </Stack>
-            <Button
-              fontFamily={'heading'}
-              mt={8}
-              w={'full'}
-              bgGradient="linear(to-r, red.400,pink.400)"
-              color={'white'}
-              _hover={{
-                bgGradient: 'linear(to-r, red.400,pink.400)',
-                boxShadow: 'xl',
-              }}>
-              Submit
-            </Button>
-          </Box>
-          form
-        </Stack>
-      </Container>
-      <Blur position={'absolute'} top={-10} left={-10} style={{ filter: 'blur(70px)' }} />
-    </Box>
+              <Button
+                w="7rem"
+                isDisabled={step === 3}
+                onClick={() => {
+                  setStep(step + 1)
+                  if (step === 3) {
+                    setProgress(100)
+                  } else {
+                    setProgress(progress + 33.33)
+                  }
+                }}
+                colorScheme="teal"
+                variant="outline">
+                Next
+              </Button>
+            </Flex>
+            {step === 3 ? (
+              <Button
+                w="7rem"
+                colorScheme="red"
+                variant="solid"
+                onClick={() => {
+                  toast({
+                    title: 'Account created.',
+                    description: "We've created your account for you.",
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                  })
+                }}>
+                Submit
+              </Button>
+            ) : null}
+          </Flex>
+        </ButtonGroup>
+      </Box>
+    </>
   )
 }
