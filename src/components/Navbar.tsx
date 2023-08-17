@@ -54,7 +54,7 @@ export default function WithSubnavigation() {
                         textAlign={useBreakpointValue({ base: 'center', md: 'right' })}
                         fontFamily={'heading'}
                         color={useColorModeValue('gray.800', 'white')}>
-                        Logo
+                        RdvDoctor
                     </Text>
 
                     <Flex display={{ base: 'none', md: 'flex' }} ml={200}>
