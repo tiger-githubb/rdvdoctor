@@ -7,8 +7,6 @@ import {
   Stack,
   Text,
   Button,
-  Icon,
-  IconProps,
 } from '@chakra-ui/react'
 
 
