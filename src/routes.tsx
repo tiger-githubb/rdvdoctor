@@ -5,6 +5,7 @@ import SignUpPage from './pages/RegisterLogin/SignUpPage';
 import SignInPage from './pages/RegisterLogin/SignInPage';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard/Dashboard';
+import ProfessionalsPage from './pages/Professionals/ProfessionalsPage';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -13,6 +14,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/inscription" element={<SignUpPage />} />
       <Route path="/connexion" element={<SignInPage />} />
       <Route path="/dashboard" element={<Dashboard/>} />
+      <Route path="/Proffesionels" element={<ProfessionalsPage/>} />
+
     </Routes>
   );
 };
