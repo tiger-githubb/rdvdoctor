@@ -10,35 +10,13 @@ import {
   Input,
   Button,
   SimpleGrid,
-  Avatar,
   AvatarGroup,
   useBreakpointValue,
   IconProps,
   Icon,
 } from '@chakra-ui/react'
 
-const avatars = [
-  {
-    name: 'Ryan Florence',
-    url: 'https://bit.ly/ryan-florence',
-  },
-  {
-    name: 'Segun Adebayo',
-    url: 'https://bit.ly/sage-adebayo',
-  },
-  {
-    name: 'Kent Dodds',
-    url: 'https://bit.ly/kent-c-dodds',
-  },
-  {
-    name: 'Prosper Otemuyiwa',
-    url: 'https://bit.ly/prosper-baba',
-  },
-  {
-    name: 'Christian Nwamba',
-    url: 'https://bit.ly/code-beast',
-  },
-]
+
 
 const Blur = (props: IconProps) => {
   return (
@@ -74,67 +52,9 @@ export default function SignIn() {
           <Heading
             lineHeight={1.1}
             fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}>
-            Senior web designers{' '}
-            <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">
-              &
-            </Text>{' '}
-            Full-Stack Developers
+            Trouvez facilement{' '} un docteur avec nous
           </Heading>
-          <Stack direction={'row'} spacing={4} align={'center'}>
-            <AvatarGroup>
-              {avatars.map((avatar) => (
-                <Avatar
-                  key={avatar.name}
-                  name={avatar.name}
-                  src={avatar.url}
-                  // eslint-disable-next-line react-hooks/rules-of-hooks
-                  size={useBreakpointValue({ base: 'md', md: 'lg' })}
-                  position={'relative'}
-                  zIndex={2}
-                  _before={{
-                    content: '""',
-                    width: 'full',
-                    height: 'full',
-                    rounded: 'full',
-                    transform: 'scale(1.125)',
-                    bgGradient: 'linear(to-bl, red.400,pink.400)',
-                    position: 'absolute',
-                    zIndex: -1,
-                    top: 0,
-                    left: 0,
-                  }}
-                />
-              ))}
-            </AvatarGroup>
-            <Text fontFamily={'heading'} fontSize={{ base: '4xl', md: '6xl' }}>
-              +
-            </Text>
-            <Flex
-              align={'center'}
-              justify={'center'}
-              fontFamily={'heading'}
-              fontSize={{ base: 'sm', md: 'lg' }}
-              bg={'gray.800'}
-              color={'white'}
-              rounded={'full'}
-              minWidth={useBreakpointValue({ base: '44px', md: '60px' })}
-              minHeight={useBreakpointValue({ base: '44px', md: '60px' })}
-              position={'relative'}
-              _before={{
-                content: '""',
-                width: 'full',
-                height: 'full',
-                rounded: 'full',
-                transform: 'scale(1.125)',
-                bgGradient: 'linear(to-bl, orange.400,yellow.400)',
-                position: 'absolute',
-                zIndex: -1,
-                top: 0,
-                left: 0,
-              }}>
-              YOU
-            </Flex>
-          </Stack>
+      
         </Stack>
         <Stack
           bg={'gray.50'}
@@ -147,7 +67,7 @@ export default function SignIn() {
               color={'gray.800'}
               lineHeight={1.1}
               fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
-              Join our team
+              Heureux de vous revoir
               <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">
                 !
               </Text>
@@ -186,9 +106,7 @@ export default function SignIn() {
                   color: 'gray.500',
                 }}
               />
-              <Button fontFamily={'heading'} bg={'gray.200'} color={'gray.800'}>
-                Upload CV
-              </Button>
+            
             </Stack>
             <Button
               fontFamily={'heading'}
@@ -200,7 +118,7 @@ export default function SignIn() {
                 bgGradient: 'linear(to-r, red.400,pink.400)',
                 boxShadow: 'xl',
               }}>
-              Submit
+              Connexion
             </Button>
           </Box>
           form

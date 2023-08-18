@@ -6,7 +6,7 @@ import SignIn from './RegisterLoginComponents/SignIn';
 const SignInPage: React.FC = () => {
   return (
     <Box>
-      <Heading>Connexion</Heading>
+    
       <SignIn/>
     </Box>
   );

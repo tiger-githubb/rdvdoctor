@@ -6,6 +6,7 @@ import SignInPage from './pages/RegisterLogin/SignInPage';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard/Dashboard';
 import ProfessionalsPage from './pages/Professionals/ProfessionalsPage';
+import Footer from './components/Footer';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -15,7 +16,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/connexion" element={<SignInPage />} />
       <Route path="/dashboard" element={<Dashboard/>} />
       <Route path="/Proffesionels" element={<ProfessionalsPage/>} />
-
     </Routes>
   );
 };
@@ -25,6 +25,7 @@ const MainRouter: React.FC = () => {
     <Router>
       <Navbar />
       <AppRoutes />
+      <Footer/>
     </Router>
   );
 };
