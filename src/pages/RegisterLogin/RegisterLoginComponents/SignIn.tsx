@@ -2,7 +2,6 @@
 
 import {
   Box,
-  Flex,
   Stack,
   Heading,
   Text,
@@ -10,7 +9,6 @@ import {
   Input,
   Button,
   SimpleGrid,
-  AvatarGroup,
   useBreakpointValue,
   IconProps,
   Icon,
