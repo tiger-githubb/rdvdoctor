@@ -57,6 +57,7 @@ const ProfessionalProfile: React.FC = () => {
           {professional.name}
         </Heading>
         <Text color="gray.600">{professional.specialty}</Text>
+        <Text color={'gray.300'}>{professional.location}</Text>
         <Button mt={4} colorScheme="pink">
           Prendre un rendez-vous
         </Button>
