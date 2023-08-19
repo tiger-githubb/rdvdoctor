@@ -7,15 +7,21 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard/Dashboard';
 import ProfessionalsPage from './pages/Professionals/ProfessionalsPage';
 import Footer from './components/Footer';
+import SearchProfessionalsPage from './pages/SearchProfessionalsPage/SearchProfessionalsPage';
+import ProfessionalProfilePage from './pages/Professionals/ProfessionalProfilePage';
 
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
+
       <Route path="/" element={<Home />} />
       <Route path="/inscription" element={<SignUpPage />} />
       <Route path="/connexion" element={<SignInPage />} />
       <Route path="/dashboard" element={<Dashboard/>} />
       <Route path="/Proffesionels" element={<ProfessionalsPage/>} />
+      <Route path="/recherche" element={<SearchProfessionalsPage/>} />
+      <Route path="/details" element={<ProfessionalProfilePage/>} />
+
     </Routes>
   );
 };

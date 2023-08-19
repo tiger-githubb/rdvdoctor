@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Importez la Link de React Router
 import {
   Heading,
   Avatar,
@@ -58,18 +59,21 @@ const ProfesionalCard: React.FC<ProfesionalCardProps> = ({ professional }) => {
             <Text color={'gray.500'}>{professional.specialty}</Text>
           </Stack>
 
-          <Button
-            w={'full'}
-            mt={2}
-            bg={useColorModeValue('#151f21', 'gray.900')}
-            color={'white'}
-            rounded={'md'}
-            _hover={{
-              transform: 'translateY(-2px)',
-              boxShadow: 'lg',
-            }}>
-            Voir le profil
-          </Button>
+          {/* Utilisez la Link pour lier vers la page du profil professionnel */}
+          <Link to={`/professionals/${professional.id}`}>
+            <Button
+              w={'full'}
+              mt={2}
+              bg={useColorModeValue('#151f21', 'gray.900')}
+              color={'white'}
+              rounded={'md'}
+              _hover={{
+                transform: 'translateY(-2px)',
+                boxShadow: 'lg',
+              }}>
+              Voir le profil
+            </Button>
+          </Link>
         </Box>
       </Box>
     </Center>

@@ -250,8 +250,12 @@ const NAV_ITEMS: Array<NavItem> = [
         label: 'Proffesionnels',
         href: '/Proffesionels',
     },
+    
     {
-        label: 'Dashboard',
+        label: 'Trouver un professionnel',
+        href: '/recherche',
+    },{
+        label: 'Tableau de Bord ',
         href: '/dashboard',
     },
     // {
