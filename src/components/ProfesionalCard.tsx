@@ -60,7 +60,7 @@ const ProfesionalCard: React.FC<ProfesionalCardProps> = ({ professional }) => {
           </Stack>
 
           {/* Utilisez la Link pour lier vers la page du profil professionnel */}
-          <Link to={`/professionals/${professional.id}`}>
+          <Link to={`/proffesionels/${professional.id}`}>
             <Button
               w={'full'}
               mt={2}

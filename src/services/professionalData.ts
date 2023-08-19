@@ -30,7 +30,7 @@ export const professionalsData = [
       specialty: 'Orthopédiste',
       avatarUrl: 'https://picsum.photos/seed/picsum/200/300',
     },    {
-      id: 1,
+      id: 6,
       name: 'Dr. Jean Dupont',
       specialty: 'Dentiste',
       avatarUrl: 'https://picsum.photos/seed/picsum/200/300',

@@ -18,9 +18,9 @@ const AppRoutes: React.FC = () => {
       <Route path="/inscription" element={<SignUpPage />} />
       <Route path="/connexion" element={<SignInPage />} />
       <Route path="/dashboard" element={<Dashboard/>} />
-      <Route path="/Proffesionels" element={<ProfessionalsPage/>} />
+      <Route path="/proffesionels" element={<ProfessionalsPage/>} />
       <Route path="/recherche" element={<SearchProfessionalsPage/>} />
-      <Route path="/details" element={<ProfessionalProfilePage/>} />
+      <Route path="/proffesionels/:id" element={<ProfessionalProfilePage/>} />
 
     </Routes>
   );
