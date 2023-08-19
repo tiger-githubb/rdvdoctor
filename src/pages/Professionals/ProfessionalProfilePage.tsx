@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom'; // Si vous utilisez React Router
 import ProfessionalProfile from './ProfessionalComponents/ProfessionalProfile';
+import { professionalsData } from '../../services/professionalData';
 
 const ProfessionalProfilePage: React.FC = () => {
   const { professionalId } = useParams(); // Récupérez l'ID du professionnel depuis les paramètres d'URL
@@ -10,15 +11,16 @@ const ProfessionalProfilePage: React.FC = () => {
     id: professionalId,
     name: 'Dr. Jean Dupont',
     specialty: 'Dentiste',
-    location: 'Paris, France',
     avatarUrl: 'lien_vers_avatar',
-    description: 'Description du professionnel...',
+
   };
+
+
 
   return (
     <div>
- 
-      <ProfessionalProfile {...professionalData} />
+      {/* <ProfessionalProfile {...professionalData} /> */}
+      <ProfessionalProfile />
     </div>
   );
 };
