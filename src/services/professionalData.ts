@@ -37,7 +37,7 @@ export const professionalsData = [
   },    
   {
     id: 6,
-    name: 'Dr. Jean Dupont',
+    name: 'Dr.Jean Dupont',
     specialty: 'Dentiste',
     location: 'Tsévié, Togo',
     avatarUrl: 'https://picsum.photos/seed/picsum/200/300',
