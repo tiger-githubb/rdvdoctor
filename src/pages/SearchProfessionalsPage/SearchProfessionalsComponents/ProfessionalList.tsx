@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, Heading, SimpleGrid } from '@chakra-ui/react';
+import { SimpleGrid } from '@chakra-ui/react';
 import ProfesionalCard from '../../../components/ProfesionalCard';
 
 import { professionalsData } from '../../../services/professionalData';

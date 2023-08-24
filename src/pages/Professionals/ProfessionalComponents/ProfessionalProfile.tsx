@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Flex,
@@ -7,7 +7,14 @@ import {
   Image,
   Button,
   Divider,
-  Stack
+  Stack,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { professionalsData } from '../../../services/professionalData';
@@ -24,19 +31,26 @@ const localizer = momentLocalizer(moment);
 
 const ProfessionalProfile: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams<{ id: string }>();
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   if (id === undefined) {
     return <div>Identifiant du professionnel non spécifié.</div>;
   }
 
-  const professional = professionalsData.find(prof => prof.id === parseInt(id, 10));
+  const professional = professionalsData.find((prof) => prof.id === parseInt(id, 10));
 
   if (!professional) {
     return <div>Professionnel non trouvé.</div>;
   }
-
- 
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
@@ -46,7 +60,6 @@ const ProfessionalProfile: React.FC = () => {
     new Date('2023-08-25'),
     new Date('2023-08-26'),
     new Date('2023-08-27'),
-
   ];
 
   return (
@@ -58,7 +71,7 @@ const ProfessionalProfile: React.FC = () => {
         </Heading>
         <Text color="gray.600">{professional.specialty}</Text>
         <Text color={'gray.300'}>{professional.location}</Text>
-        <Button mt={4} colorScheme="pink">
+        <Button mt={4} colorScheme="pink" onClick={handleOpenModal}>
           Prendre un rendez-vous
         </Button>
       </Flex>
@@ -87,8 +100,26 @@ const ProfessionalProfile: React.FC = () => {
         />
       </Stack>
 
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Prendre un rendez-vous avec {professional.name}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Choisissez une date de rendez-vous :</Text>
+            <DatePicker selected={selectedDate} onChange={handleDateChange} />
+            {/* Ajoutez d'autres champs pour le créneau horaire, les informations de contact, etc. */}
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="pink" mr={3} onClick={handleCloseModal}>
+              Annuler
+            </Button>
+            <Button colorScheme="blue">Prendre rendez-vous</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
-
+ 
 export default ProfessionalProfile;

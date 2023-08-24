@@ -13,11 +13,11 @@ import {
 } from '@chakra-ui/react'
 import { ReactElement } from 'react'
 import {
-  FcAbout,
+
   FcAssistant,
   FcCollaboration,
   FcDonate,
-  FcManager,
+ 
 } from 'react-icons/fc'
 
 interface CardProps {

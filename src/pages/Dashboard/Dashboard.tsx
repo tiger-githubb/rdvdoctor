@@ -5,16 +5,15 @@ import AppointmentsList from './DashboardComponents/AppointmentsList';
 import MyCalendar from './DashboardComponents/Calendar';
 
 const Dashboard = () => {
-    const appointments = [
-        {
-          id: 1,
-          patientName: 'John Doe',
-          date: '2023-08-25 10:00 AM',
-          reason: 'Checkup',
-          status: 'Confirmed',
-        },
-        // Add more appointments here
-      ];
+    // const appointments = [
+    //     {
+    //       id: 1,
+    //       patientName: 'John Doe',
+    //       date: '2023-08-25 10:00 AM',
+    //       reason: 'Checkup',
+    //       status: 'Confirmed',
+    //     },
+    //   ];
    
 
   return (
