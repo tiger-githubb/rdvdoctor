@@ -9,6 +9,7 @@ import ProfessionalsPage from './pages/Professionals/ProfessionalsPage';
 import Footer from './components/Footer';
 import SearchProfessionalsPage from './pages/SearchProfessionalsPage/SearchProfessionalsPage';
 import ProfessionalProfilePage from './pages/Professionals/ProfessionalProfilePage';
+import Registration from './pages/Registration';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const AppRoutes: React.FC = () => {
 
       <Route path="/" element={<Home />} />
       <Route path="/inscription" element={<SignUpPage />} />
+      <Route path="/test" element={<Registration/>} />
       <Route path="/connexion" element={<SignInPage />} />
       <Route path="/dashboard" element={<Dashboard/>} />
       <Route path="/proffesionels" element={<ProfessionalsPage/>} />
