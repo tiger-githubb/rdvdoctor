@@ -5,7 +5,7 @@ import { collection } from 'firebase/firestore';
 import { getDocs } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 
-interface ProfessionalData {
+export interface ProfessionalData {
   uid: string;
   role: number;
   phone_number: string;
