@@ -27,26 +27,26 @@ function Registration() {
     role: 'doctor', // Change to 'patient' if needed
   });
 
-  const handleRegistration = async () => {
-    try {
-      const response = await apiService.registerUser(registrationData);
-      console.log('Registration success:', response.data);
+  // const handleRegistration = async () => {
+  //   try {
+  //     const response = await apiService.registerUser(registrationData);
+  //     console.log('Registration success:', response.data);
 
-      setRegistrationData({
-        name: '',
-        last_name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-        phone_number: '',
-        address: '',
-        date_of_birth: '',
-        role: 'doctor',
-      });
-    } catch (error) {
-      console.error('Registration error:', error);
-    }
-  };
+  //     setRegistrationData({
+  //       name: '',
+  //       last_name: '',
+  //       email: '',
+  //       password: '',
+  //       password_confirmation: '',
+  //       phone_number: '',
+  //       address: '',
+  //       date_of_birth: '',
+  //       role: 'doctor',
+  //     });
+  //   } catch (error) {
+  //     console.error('Registration error:', error);
+  //   }
+  // };
 
   return (
     <div>
@@ -116,7 +116,7 @@ function Registration() {
             setRegistrationData({ ...registrationData, date_of_birth: e.target.value })
           }
         />
-        <button type="button" onClick={handleRegistration}>Register</button>
+        <button type="button" >Register</button>
       </form>
     </div>
   );
