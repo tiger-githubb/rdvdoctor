@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as apiService from '../../src/services/apiService';
+import * as apiService from '../services/firebase';
 
 
 interface RegistrationData {
