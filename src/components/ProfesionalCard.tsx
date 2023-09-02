@@ -14,11 +14,16 @@ import {
 } from '@chakra-ui/react';
 
 interface Professional {
-  id: number;
-  name: string;
-  specialty: string;
-  location: string;
-  avatarUrl: string;
+  uid: string;
+  role: number;
+  phone_number: string;
+  address: string;
+  email: string;
+  date_of_birth: string;
+  description?: string;
+  displayName: string;
+  profile_image: string;
+  speciality?: string;
 }
 
 interface ProfesionalCardProps {
@@ -38,14 +43,14 @@ const ProfesionalCard: React.FC<ProfesionalCardProps> = ({ professional }) => {
         <Image
           h={'120px'}
           w={'full'}
-          src={professional.avatarUrl}
+          src={professional.profile_image}
           objectFit="cover"
           alt="#"
         />
         <Flex justify={'center'} mt={-12}>
           <Avatar
             size={'xl'}
-            src={professional.avatarUrl}
+            src={professional.profile_image}
             css={{
               border: '2px solid white',
             }}
@@ -55,12 +60,12 @@ const ProfesionalCard: React.FC<ProfesionalCardProps> = ({ professional }) => {
         <Box p={6}>
           <Stack spacing={0} align={'center'} mb={5}>
             <Heading fontSize={'xl'} fontWeight={500} fontFamily={'body'}>
-              {professional.name}
+              {professional.displayName}
             </Heading>
-            <Text color={'gray.500'}>{professional.specialty}</Text>
-            <Text color={'gray.300'}>{professional.location}</Text>
+            <Text color={'gray.500'}>{professional.speciality}</Text>
+            <Text color={'gray.300'}>{professional.address}</Text>
           </Stack>
-          <Link to={`/proffesionels/${professional.id}`}>
+          <Link to={`/proffesionels/${professional.uid}`}>
             <Button
               w={'full'}
               mt={2}
