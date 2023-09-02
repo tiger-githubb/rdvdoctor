@@ -11,12 +11,13 @@ import {
 } from '@chakra-ui/react';
 
 interface Hospital {
-  id: number;
+  id: string; 
   name: string;
   address: string;
-  phoneNumber: string;
-  imageUrl: string;
+  phone_number: string;
+  hospital_image: string;
 }
+
 
 interface HospitalCardProps {
   hospital: Hospital;
@@ -36,7 +37,7 @@ const HospitalCard: React.FC<HospitalCardProps> = ({ hospital }) => {
         <Image
           h={'120px'}
           w={'full'}
-          src={hospital.imageUrl}
+          src={hospital.hospital_image}
           objectFit="cover"
           alt="#"
         />

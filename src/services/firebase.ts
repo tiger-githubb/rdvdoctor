@@ -1,35 +1,25 @@
-import axios from 'axios';
+import { initializeApp } from "firebase/app";
+import 'firebase/auth';
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
-interface RegistrationData {
-  name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
-  phone_number: string;
-  address: string;
-  date_of_birth: string;
-  role: string;
-}
-
-const API_BASE_URL = 'https://rdvdoctor.tigerdigital.tech/v1/';
-
-const apiService = axios.create({
-  baseURL: API_BASE_URL,
-});
-
-
-interface LoginData {
-  email: string;
-  password: string;
-}
-
-export const registerUser = (userData: RegistrationData) => {
-  return apiService.post('register', userData);
+const firebaseConfig = {
+  apiKey: "AIzaSyD-KAQS3tzcm73ZHBlLUfI_t5R9a5acsQE",
+  authDomain: "rdvdoctor-d36a1.firebaseapp.com",
+  databaseURL: "https://rdvdoctor-d36a1-default-rtdb.firebaseio.com",
+  projectId: "rdvdoctor-d36a1",
+  storageBucket: "rdvdoctor-d36a1.appspot.com",
+  messagingSenderId: "608032171899",
+  appId: "1:608032171899:web:9edc8390302cce5c383fde"
 };
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-export const loginUser = (loginData: LoginData) => {
-  return apiService.post('login', loginData);
-};
+export const auth = getAuth();
+export const db = getFirestore();
 
-export default apiService;
+
+export default app;
+
+
+

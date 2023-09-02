@@ -7,13 +7,14 @@ import FeaturedHospitalsSection from './HomeComponents/FeaturedHospitalsSection'
 import CallToAction from '../../components/CallToAction';
 
 const Home: React.FC = () => {
+
   return (
     <Box p={4}>
-        <Hero/>
-        <Features/>
-        <FeaturedProfessionalsSection/>
-        <FeaturedHospitalsSection/>
-        <CallToAction/>
+      <Hero />
+      <Features />
+      <FeaturedProfessionalsSection />
+      <FeaturedHospitalsSection />
+      <CallToAction />
     </Box>
   );
 };

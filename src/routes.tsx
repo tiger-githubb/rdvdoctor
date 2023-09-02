@@ -22,7 +22,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/dashboard" element={<Dashboard/>} />
       <Route path="/proffesionels" element={<ProfessionalsPage/>} />
       <Route path="/recherche" element={<SearchProfessionalsPage/>} />
-      <Route path="/proffesionels/:id" element={<ProfessionalProfilePage/>} />
+      <Route path="/proffesionels/:uid" element={<ProfessionalProfilePage/>} />
 
     </Routes>
   );
