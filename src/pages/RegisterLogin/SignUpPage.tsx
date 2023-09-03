@@ -6,7 +6,6 @@ import SignUp from './RegisterLoginComponents/SignUp';
 const SignUpPage: React.FC = () => {
   return (
     <Box>
-      <Heading>Inscription</Heading>
       <SignUp/>
     </Box>
   );
