@@ -3,6 +3,7 @@ import 'firebase/auth';
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyD-KAQS3tzcm73ZHBlLUfI_t5R9a5acsQE",
   authDomain: "rdvdoctor-d36a1.firebaseapp.com",
@@ -17,7 +18,6 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth();
 export const db = getFirestore();
-
 
 export default app;
 
