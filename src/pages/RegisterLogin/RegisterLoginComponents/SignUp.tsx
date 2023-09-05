@@ -38,7 +38,7 @@ const SignUp: FC = () => {
     submit: null,
   };
 
-  const { errors, values, touched, handleBlur, handleChange, handleSubmit } =
+  const { values,  handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues,
       onSubmit: async (values) => {
