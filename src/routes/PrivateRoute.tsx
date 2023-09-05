@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Navigate } from 'react-router-dom';
-import { auth } from './services/firebase';
+import { auth } from '../services/firebase';
 
 const PrivateRoute: React.FC<{
   element: React.ReactNode;

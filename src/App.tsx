@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChakraProvider , extendTheme} from '@chakra-ui/react';
-import Routes from './routes';
+import Routes from './routes/routes';
 
 const theme = extendTheme({
   fonts: {
