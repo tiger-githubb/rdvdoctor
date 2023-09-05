@@ -6,7 +6,6 @@ import {
   FormLabel,
   Input,
   InputGroup,
-  HStack,
   InputRightElement,
   Stack,
   Button,
@@ -15,18 +14,21 @@ import {
   useColorModeValue,
   Link,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
+
 import { useFormik } from "formik";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../../services/firebase";
-import {} from "../../../services/firebase";
 import { doc } from "firebase/firestore";
 import { setDoc } from "firebase/firestore";
 
 const SignUp: FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
     name: "",
@@ -41,6 +43,8 @@ const SignUp: FC = () => {
       initialValues,
       onSubmit: async (values) => {
         try {
+          setIsLoading(true);
+
           const userCredential = await createUserWithEmailAndPassword(
             auth,
             values.email,
@@ -52,7 +56,7 @@ const SignUp: FC = () => {
             displayName: values.name,
             email: user.email,
             uid: user.uid,
-            role: 1,
+            role: 2,
             phone_number: "",
             description: "",
             speciality: "",
@@ -70,11 +74,48 @@ const SignUp: FC = () => {
             ...defaultUserData,
           };
           localStorage.setItem("user", JSON.stringify(userData));
-          console.log("good inscription");
 
+          toast({
+            title: "Inscription réussie",
+            description: "Vous êtes maintenant inscrit.",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
+          setIsLoading(false);
           navigate("/dashboard");
-        } catch (error) {
-          console.log(error);
+        } catch (error: any) {
+          setIsLoading(false);
+
+          let errorMessage =
+            "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.";
+
+          switch (error.code) {
+            case "auth/email-already-in-use":
+              errorMessage =
+                "Cette adresse e-mail est déjà associée à un compte. Veuillez vous connecter ou utiliser une autre adresse e-mail.";
+              break;
+            case "auth/invalid-email":
+              errorMessage =
+                "L'adresse e-mail saisie est invalide. Veuillez saisir une adresse e-mail valide.";
+              break;
+            case "auth/weak-password":
+              errorMessage =
+                "Le mot de passe doit comporter au moins 6 caractères.";
+              break;
+            default:
+              errorMessage =
+                "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.";
+              break;
+          }
+
+          toast({
+            title: "Erreur lors de l'inscription",
+            description: errorMessage,
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
         }
       },
     });
@@ -150,7 +191,8 @@ const SignUp: FC = () => {
 
               <Stack spacing={10} pt={2}>
                 <Button
-                  loadingText="Submitting"
+                  loadingText="Chargement en cours..."
+                  isLoading={isLoading}
                   size="lg"
                   type="submit"
                   bg={"blue.400"}
