@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import SignUpPage from "../pages/RegisterLogin/SignUpPage";
 import SignInPage from "../pages/RegisterLogin/SignInPage";
@@ -9,7 +9,10 @@ import ProfessionalsPage from "../pages/Professionals/ProfessionalsPage";
 import Footer from "../components/Footer";
 import SearchProfessionalsPage from "../pages/SearchProfessionalsPage/SearchProfessionalsPage";
 import ProfessionalProfilePage from "../pages/Professionals/ProfessionalProfilePage";
-import PrivateRoute from "./PrivateRoute";
+import { auth } from "../services/firebase";
+
+const user = auth.currentUser;
+const token = localStorage.getItem("token");
 
 const AppRoutes: React.FC = () => {
   return (
@@ -24,10 +27,12 @@ const AppRoutes: React.FC = () => {
 
       {/* closed routes  */}
       <Route
-        path="/dashboard"
-        element={<PrivateRoute element={<Dashboard />} />
-      }
-      />
+          path="/dashboard"
+          element={
+            !token || !user ? <Navigate to="/connexion" /> : <Dashboard />
+          }
+        />
+      
     </Routes>
   );
 };
