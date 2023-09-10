@@ -17,9 +17,8 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -69,7 +68,7 @@ const ProfessionalProfile: React.FC = () => {
 
   return (
     <Box p={4} >
-          {professional ? ( // Vérifiez si professional existe avant d'afficher les détails
+          {professional ? ( 
 
       <><Flex direction="column" align="center" py={8}>
           <Image src={professional.profile_image} alt={professional.displayName} boxSize="200px" borderRadius="full" />
@@ -108,7 +107,7 @@ const ProfessionalProfile: React.FC = () => {
             </ModalContent>
           </Modal></>
        ) : (
-        <div>Professionnel non trouvé.</div> // Gérez le cas où professional est null
+        <div>Professionnel non trouvé.</div> 
       )}
     </Box>
   );
