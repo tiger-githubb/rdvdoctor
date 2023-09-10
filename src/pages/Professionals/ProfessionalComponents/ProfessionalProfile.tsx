@@ -18,21 +18,17 @@ import {
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
-import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import 'moment/locale/fr';
 import { collection, doc, getDoc } from 'firebase/firestore'; 
 import { db } from '../../../services/firebase';
 import { ProfessionalData } from '../ProfessionalsPage';
+import { getDatabase, ref, onValue } from "firebase/database";
 
 moment.locale('fr');
 
-const localizer = momentLocalizer(moment);
-
-
 const ProfessionalProfile: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [professional, setProfessional] = useState<ProfessionalData | null>(null); 
   const { uid } = useParams<{ uid: string }>();
@@ -64,6 +60,22 @@ const ProfessionalProfile: React.FC = () => {
       fetchProfessionalData();
     }
   }, [uid]);
+
+  useEffect(() => {
+    const professionnelId = uid ;
+
+    const db = getDatabase();
+    const databaseRef =ref(db,`disponibilites_professionnels/${professionnelId}`);
+    onValue(databaseRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        console.log(data);
+       console.log("donné dispo");
+      } else {
+        console.log('Aucune donnée trouvée dans la base de données Firebase.');
+      }
+    });
+  }, []);
 
 
   return (
