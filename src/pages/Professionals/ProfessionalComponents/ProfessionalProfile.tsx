@@ -67,17 +67,6 @@ const ProfessionalProfile: React.FC = () => {
   }, [uid]);
 
 
-
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-  };
-
-  const availabilityData = [
-    new Date('2023-08-25'),
-    new Date('2023-08-26'),
-    new Date('2023-08-27'),
-  ];
-
   return (
     <Box p={4} >
           {professional ? ( // Vérifiez si professional existe avant d'afficher les détails
@@ -97,21 +86,11 @@ const ProfessionalProfile: React.FC = () => {
             <Text fontSize="xl" fontWeight="bold">
               Sélectionnez une date de rendez-vous
             </Text>
-            <DatePicker selected={selectedDate} onChange={handleDateChange} />
 
             <Text fontSize="xl" fontWeight="bold">
               Disponibilités
             </Text>
-            <Calendar
-              localizer={localizer}
-              events={availabilityData.map((date) => ({
-                start: date,
-                end: date,
-                title: 'Disponible',
-              }))}
-              startAccessor="start"
-              endAccessor="end"
-              style={{ height: '500px' }} />
+     
           </Stack><Modal isOpen={isModalOpen} onClose={handleCloseModal}>
             <ModalOverlay />
             <ModalContent>
@@ -119,8 +98,6 @@ const ProfessionalProfile: React.FC = () => {
               <ModalCloseButton />
               <ModalBody>
                 <Text>Choisissez une date de rendez-vous :</Text>
-                <DatePicker selected={selectedDate} onChange={handleDateChange} />
-                {/* Ajoutez d'autres champs pour le créneau horaire, les informations de contact, etc. */}
               </ModalBody>
               <ModalFooter>
                 <Button colorScheme="pink" mr={3} onClick={handleCloseModal}>
