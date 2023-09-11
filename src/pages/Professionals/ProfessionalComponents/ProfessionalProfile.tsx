@@ -23,15 +23,45 @@ import { db } from "../../../services/firebase";
 import { getDatabase, ref, set, onValue } from "firebase/database";
 import { FaCheckCircle } from "react-icons/fa";
 import { ProfessionalData } from "../ProfessionalsPage";
+import { getAuth } from "firebase/auth";
 
+interface AvailabilityData {
+  [key: string]: {
+    matin: {
+      creneaux: {
+        [key: string]: {
+          reserved: boolean;
+          reservedBy: string | null;
+        };
+      };
+    };
+    soir: {
+      creneaux: {
+        [key: string]: {
+          reserved: boolean;
+          reservedBy: string | null;
+        };
+      };
+    };
+  };
+}
+
+interface Slot {
+  reserved: boolean;
+  reservedBy: string | null;
+}
 moment.locale("fr");
 
 const ProfessionalProfile: React.FC = () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const currentUserUid = user ? user.uid : null;
   const [professional, setProfessional] = useState<ProfessionalData | null>(
     null
   );
   const { uid } = useParams<{ uid: string }>();
   const [availabilityData, setAvailabilityData] = useState<any | null>(null);
+  // const [availabilityData, setAvailabilityData] = useState<AvailabilityData | null>(null);
 
   useEffect(() => {
     const fetchProfessionalData = async () => {
@@ -70,50 +100,96 @@ const ProfessionalProfile: React.FC = () => {
     });
   }, [uid]);
 
-const updateDataInFirebase = (professionnelId: any, day: any, period: any, time: any, newReservedValue: unknown) => {
-  const db = getDatabase();
+  const updateDataInFirebase = (
+    professionnelId: any,
+    day: any,
+    period: any,
+    time: any,
+    // newReservedValue: unknown
+    reserved: boolean
 
-  const availabilityRef = ref(db, `professionnels/${professionnelId}/disponibilites/${day}/${period}/creneaux/${time}/reserved`);
-  
-  set(availabilityRef, newReservedValue)
-    .then(() => {
-      console.log("Mise à jour réussie");  
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
+  ) => {
+    const db = getDatabase();
 
-const handleButtonClick = (day: string, period: string, time: string, slot: { reserved: any; }) => {
+    const availabilityRef = ref(
+      db,
+      `professionnels/${professionnelId}/disponibilites/${day}/${period}/creneaux/${time}/reserved`
+    );
 
-  const { reserved } = slot;
-  
-  const updatedSlot = {
-    ...slot,
-    reserved: !reserved 
+    set(availabilityRef, reserved)
+      .then(() => {
+        console.log("Mise à jour réussie");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  setAvailabilityData((prevData: { [x: string]: { [x: string]: { creneaux: any; }; }; }) => {
+  const handleButtonClick = (
+    day: string,
+    period: string,
+    time: string,
+    // slot: { reserved: any; reservedBy: any }
+    slot: Slot
+  ) => {
+    const { reserved, reservedBy } = slot;
+    let updatedSlot: Slot;
 
-    return {
-      ...prevData,
-      [day]: {
-        ...prevData[day], 
-        [period]: {
-          ...prevData[day][period],
-          creneaux: {
-            ...prevData[day][period].creneaux, 
-            [time]: updatedSlot 
-          }
-        }
+  const alreadyReservedByUser = reservedBy === currentUserUid;
+
+  if (alreadyReservedByUser) {
+    updatedSlot = {
+      ...slot,
+      reserved: false,
+      reservedBy: null,
+    };
+  } else {
+    updatedSlot = {
+      ...slot,
+      reserved: !reserved,
+      reservedBy: currentUserUid,
+    };
+  }
+    setAvailabilityData(
+      (prevData: {
+        professionnelId: any;
+        [x: string]: { [x: string]: { creneaux: any } };
+      }) => {
+        return {
+          ...prevData,
+          [day]: {
+            ...prevData[day],
+            [period]: {
+              ...prevData[day][period],
+              creneaux: {
+                ...prevData[day][period].creneaux,
+                [time]: updatedSlot,
+              },
+            },
+          },
+        };
       }
-    }
-  
-  });
-  const professionnelId = uid;
-  updateDataInFirebase(professionnelId, day, period, time, updatedSlot.reserved);
-}
-  
+    );
+    const professionnelId = uid;
+    const db = getDatabase();
+
+    const availabilityRef = ref(
+      db,
+      `professionnels/${professionnelId}/disponibilites/${day}/${period}/creneaux/${time}`
+    );
+
+    set(availabilityRef, {
+      ...updatedSlot,
+      reservedBy: currentUserUid,
+    });
+    updateDataInFirebase(
+      professionnelId,
+      day,
+      period,
+      time,
+      updatedSlot.reserved
+    );
+  };
 
   return (
     <Box p={4}>
