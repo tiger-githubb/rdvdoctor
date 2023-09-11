@@ -27,10 +27,10 @@ const HospitalCard: React.FC<HospitalCardProps> = ({ hospital }) => {
   return (
     <Center py={6}>
       <Box
-        maxW={'270px'}
+        maxW={'300px'}
         w={'full'}
         bg={useColorModeValue('white', 'gray.800')}
-        boxShadow={'2xl'}
+        boxShadow={'xl'}
         rounded={'md'}
         overflow={'hidden'}
       >

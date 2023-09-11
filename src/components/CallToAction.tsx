@@ -1,37 +1,77 @@
-import React from 'react';
-import { Box, Button, Center, Heading, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+  chakra,
+  Link,
+  Stack,
+  Box,
+  Button,
+  useColorModeValue,
+} from "@chakra-ui/react";
+// Here we have used react-icons package for the icon
+import { FaGithub, FaSearchengin } from "react-icons/fa";
 
-const CallToAction: React.FC = () => {
+const CallToAction = () => {
   return (
-    <Center py={12}>
+    <Box pb={0}>
+      <Stack
+        pos="relative"
+        bgGradient={`linear(to-l, blue.200, blue.100 , cyan.100)`}
+        height="250px"
+        w="100%"
+      ></Stack>
       <Box
-        maxW={'lg'}
-        w={'full'}
-        bg={useColorModeValue('white', 'gray.800')}
-        boxShadow={'2xl'}
-        rounded={'md'}
-        p={6}
-        textAlign={'center'}
+        maxW="3xl"
+        p={4}
+        isolation="isolate"
+        zIndex={3}
+        mt="-10rem"
+        marginInline="auto"
       >
-        <Heading fontSize={'2xl'} mb={4}>
-          Besoin de prendre un rendez-vous ?
-        </Heading>
-        <Text fontSize={'lg'} color={'gray.500'}>
-          Trouvez le professionnel de santé idéal pour vos besoins.
-        </Text>
-        <Button
-          mt={8}
-          bg={useColorModeValue('#151f21', 'gray.900')}
-          color={'white'}
-          _hover={{
-            transform: 'translateY(-2px)',
-            boxShadow: 'lg',
-          }}
+        <Box
+          boxShadow={useColorModeValue(
+            "0 2px 3px rgba(160, 174, 192, 0.3)",
+            "0 2px 3px rgba(9, 17, 28, 0.6)"
+          )}
+          bg={useColorModeValue("white", "gray.800")}
+          p={{ base: 4, sm: 8 }}
+          overflow="hidden"
+          rounded="2xl"
         >
-          Rechercher des professionnels
-        </Button>
+          <Stack
+            pos="relative"
+            zIndex={1}
+            direction="column"
+            spacing={5}
+            textAlign="center"
+          >
+            <chakra.h1 fontSize="4xl" lineHeight={1.2} fontWeight="bold">
+              Besoin de prendre un rendez-vous ?
+            </chakra.h1>
+            <chakra.h1
+              color="gray.400"
+              fontSize="xl"
+              maxW="600px"
+              lineHeight={1.2}
+            >
+              Prenez le contrôle de votre santé dès maintenant avec RdvDoctor.
+              Réservez votre premier rendez-vous dès aujourd'hui.
+            </chakra.h1>
+
+            <Stack direction={{ base: "column", md: "row" }}  align="center" justify="center" >
+              <Button
+                leftIcon={<FaSearchengin />}
+                as={Link}
+                href="/recherche"
+                rounded="md"
+                colorScheme="gray"
+                variant="solid"
+              >
+                Trouver un proffesionnel
+              </Button>
+            </Stack>
+          </Stack>
+        </Box>
       </Box>
-    </Center>
+    </Box>
   );
 };
 
