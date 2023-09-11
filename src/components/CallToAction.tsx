@@ -6,8 +6,7 @@ import {
   Button,
   useColorModeValue,
 } from "@chakra-ui/react";
-// Here we have used react-icons package for the icon
-import { FaGithub, FaSearchengin } from "react-icons/fa";
+import {  FaSearchengin } from "react-icons/fa";
 
 const CallToAction = () => {
   return (

@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 interface Hospital {
-  id: string; 
+  createdByUserId: string; 
   name: string;
   address: string;
   phone_number: string;

@@ -5,7 +5,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../../services/firebase';
 
 interface HospitalData {
-  id: string;
+  createdByUserId: string;
   name: string;
   address: string;
   phone_number: string;
@@ -44,7 +44,7 @@ const FeaturedHospitalsSection: React.FC = () => {
         </Heading>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
           {featuredHospitals.map((hospital) => (
-            <HospitalCard key={hospital.id} hospital={hospital} />
+            <HospitalCard key={hospital.createdByUserId} hospital={hospital} />
           ))}
         </SimpleGrid>
       </Container>

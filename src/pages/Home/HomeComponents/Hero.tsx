@@ -15,8 +15,8 @@ export default function Hero() {
     <Container maxW={'6xl'}>
       <Stack
         align={'center'}
-        spacing={{ base: 8, md: 10 }}
-        py={{ base: 15, md: 8 }}
+        spacing={{ base: 8, md: 10,lg:0  }}
+        pt={{ base: 5, md: 10 ,lg:0 }}
         direction={{ base: 'column', md: 'row' }}>
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
           <Heading
@@ -72,6 +72,7 @@ export default function Hero() {
           justify={'center'}
           align={'center'}
           position={'relative'}
+          display={{ base: 'none', md: 'flex' }}
           w={'full'}>
             <Player
               autoplay
