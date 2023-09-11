@@ -8,13 +8,6 @@ import {
   Button,
   Divider,
   Stack,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   ListItem,
   UnorderedList,
   List,
@@ -34,20 +27,13 @@ import { ProfessionalData } from "../ProfessionalsPage";
 moment.locale("fr");
 
 const ProfessionalProfile: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [professional, setProfessional] = useState<ProfessionalData | null>(
     null
   );
   const { uid } = useParams<{ uid: string }>();
   const [availabilityData, setAvailabilityData] = useState<any | null>(null);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   useEffect(() => {
     const fetchProfessionalData = async () => {
@@ -81,7 +67,6 @@ const ProfessionalProfile: React.FC = () => {
       if (snapshot.exists()) {
         const data = snapshot.val();
         setAvailabilityData(data);
-        console.log("donnée dispo", data);
       } else {
         console.log("Aucune donnée de disponibilité trouvée.");
       }
@@ -104,15 +89,9 @@ const ProfessionalProfile: React.FC = () => {
             </Heading>
             <Text color="gray.600">{professional.speciality}</Text>
             <Text color={"gray.300"}>{professional.address}</Text>
-            <Button mt={4} colorScheme="pink" onClick={handleOpenModal}>
-              Prendre un rendez-vous
-            </Button>
           </Flex>
           <Divider my={6} />
           <Stack spacing={4}>
-            <Text fontSize="xl" fontWeight="bold">
-              Sélectionnez une date de rendez-vous
-            </Text>
             <Text fontSize="xl" fontWeight="bold">
               Disponibilités
             </Text>
@@ -165,24 +144,6 @@ const ProfessionalProfile: React.FC = () => {
               <Text mt={3}>Aucune donnée de disponibilité trouvée.</Text>
             )}
           </Stack>
-          <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>
-                Prendre un rendez-vous avec {professional.displayName}
-              </ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <Text>Choisissez une date de rendez-vous :</Text>
-              </ModalBody>
-              <ModalFooter>
-                <Button colorScheme="pink" mr={3} onClick={handleCloseModal}>
-                  Annuler
-                </Button>
-                <Button colorScheme="blue">Prendre rendez-vous</Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
         </>
       ) : (
         <div>Professionnel non trouvé.</div>
