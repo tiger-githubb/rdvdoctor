@@ -15,7 +15,6 @@ import React, { useState, useEffect } from "react";
 // } from "@chakra-ui/react";
 import {
   Box,
-  chakra,
   Container,
   Stack,
   Text,
@@ -26,12 +25,9 @@ import {
   Heading,
   SimpleGrid,
   StackDivider,
-  useColorModeValue,
-  VisuallyHidden,
   List,
   ListItem,
   Divider,
-  ListIcon,
   UnorderedList,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
@@ -42,7 +38,6 @@ import "moment/locale/fr";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../services/firebase";
 import { getDatabase, ref, set, onValue } from "firebase/database";
-import { FaCheckCircle } from "react-icons/fa";
 import { ProfessionalData } from "../ProfessionalsPage";
 import { getAuth } from "firebase/auth";
 import { useToast } from "@chakra-ui/react";
@@ -56,14 +51,6 @@ interface Slot {
 
 const ProfessionalProfile: React.FC = () => {
   const toast = useToast();
-  const positions = [
-    "top",
-    "top-right",
-    "top-left",
-    "bottom",
-    "bottom-right",
-    "bottom-left",
-  ];
   const auth = getAuth();
   const user = auth.currentUser;
   const currentUserUid = user ? user.uid : null;
