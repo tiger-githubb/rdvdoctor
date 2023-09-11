@@ -6,12 +6,12 @@ import {
   Image,
   Text,
   Stack,
-  Button,
   useColorModeValue,
 } from '@chakra-ui/react';
 
 interface Hospital {
   createdByUserId: string; 
+  created_at:string;
   name: string;
   address: string;
   phone_number: string;
@@ -44,25 +44,13 @@ const HospitalCard: React.FC<HospitalCardProps> = ({ hospital }) => {
 
         <Box p={6}>
           <Stack spacing={0} align={'center'} mb={5}>
-            <Heading fontSize={'xl'} fontWeight={500} fontFamily={'body'}>
+            <Heading fontSize={'md'} fontWeight={500} fontFamily={'body'}>
               {hospital.name}
             </Heading>
             <Text color={'gray.500'}>{hospital.address}</Text>
+            <Text color={'gray.500'}>{hospital.phone_number}</Text>
           </Stack>
 
-          <Button
-            w={'full'}
-            mt={2}
-            bg={useColorModeValue('#151f21', 'gray.900')}
-            color={'white'}
-            rounded={'md'}
-            _hover={{
-              transform: 'translateY(-2px)',
-              boxShadow: 'lg',
-            }}
-          >
-            Voir le profil
-          </Button>
         </Box>
       </Box>
     </Center>

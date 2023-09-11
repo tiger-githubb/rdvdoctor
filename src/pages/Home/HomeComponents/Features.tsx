@@ -91,8 +91,7 @@ export default function features() {
           <Image
             rounded={"md"}
             alt={"feature image"}
-            src={
-              "https://images.unsplash.com/photo-1554200876-56c2f25224fa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            src={"https://img.freepik.com/photos-gratuite/equipe-afro-americaine-travaillant-rapports-controle-reception-hopital-analysant-rendez-vous-patients-papiers-medecin-receptionniste-utilisant-formulaires-medicaux-pour-aider-personnes-malades_482257-51268.jpg?w=826&t=st=1694474056~exp=1694474656~hmac=ce50ef07efa388fd08aa2ec7af8e9b40a62bf7236d6ff83052a9d21f7db0c574"
             }
             objectFit={"cover"}
           />
