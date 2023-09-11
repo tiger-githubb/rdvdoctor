@@ -47,7 +47,6 @@ const ProfessionalProfile: React.FC = () => {
         console.error("Une erreur est survenue :", error);
       }
     };
-
     if (uid) {
       fetchProfessionalData();
     }
@@ -83,14 +82,12 @@ const updateDataInFirebase = (professionnelId: any, day: any, period: any, time:
     .catch((error) => {
       console.error(error);
     });
-
 }
-
 
 const handleButtonClick = (day: string, period: string, time: string, slot: { reserved: any; }) => {
 
   const { reserved } = slot;
-
+  
   const updatedSlot = {
     ...slot,
     reserved: !reserved 
@@ -114,9 +111,7 @@ const handleButtonClick = (day: string, period: string, time: string, slot: { re
   
   });
   const professionnelId = uid;
-
   updateDataInFirebase(professionnelId, day, period, time, updatedSlot.reserved);
-
 }
   
 
