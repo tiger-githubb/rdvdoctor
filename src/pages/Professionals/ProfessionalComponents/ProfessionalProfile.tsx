@@ -266,7 +266,7 @@ const ProfessionalProfile: React.FC = () => {
                 >
                   {professional.displayName}
                 </Heading>
-                <Text fontWeight={300} fontSize={"2xl"}>
+                <Text fontWeight={500} fontSize={"2xl"}>
                   {professional.speciality}
                 </Text>
                 <Text fontWeight={400} color={"gray.500"} fontSize={"xl"}>
