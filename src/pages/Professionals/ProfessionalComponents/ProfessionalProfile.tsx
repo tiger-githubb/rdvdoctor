@@ -27,9 +27,9 @@ import moment from "moment";
 import "moment/locale/fr";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../services/firebase";
-import { ProfessionalData } from "../ProfessionalsPage";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { FaCheckCircle } from "react-icons/fa";
+import { ProfessionalData } from "../ProfessionalsPage";
 
 moment.locale("fr");
 
@@ -75,18 +75,18 @@ const ProfessionalProfile: React.FC = () => {
     const db = getDatabase();
     const databaseRef = ref(
       db,
-      `disponibilites_professionnels/${professionnelId}`
+      `professionnels/${professionnelId}/disponibilites`
     );
     onValue(databaseRef, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
         setAvailabilityData(data);
-        console.log("donné dispo", data);
+        console.log("donnée dispo", data);
       } else {
-        console.log("Aucune donnée trouvée dans la base de données Firebase.");
+        console.log("Aucune donnée de disponibilité trouvée.");
       }
     });
-  }, []);
+  }, [uid]);
 
   return (
     <Box p={4}>
@@ -116,28 +116,44 @@ const ProfessionalProfile: React.FC = () => {
             <Text fontSize="xl" fontWeight="bold">
               Disponibilités
             </Text>
- {availabilityData ? (
-        <UnorderedList mt={3} spacing={2} listStyleType="none">
-          {Object.entries(availabilityData).map(([day, slots]) => (
-            <ListItem key={day}>
-              <Stack direction="row" alignItems="center">
-                <ListIcon as={FaCheckCircle} color="green.500" />
-                <Text fontWeight="bold">{day}:</Text>
-              </Stack>
-              <List spacing={1} ml={6}>
-                {Object.entries(slots as { [key: string]: unknown }).map(([time, availability]) => (
-                  <ListItem key={time}>
-                    {time}: {(availability as string[]).join(" - ")}
-                  </ListItem>
-                ))}
-              </List>
-            </ListItem>
-          ))}
-        </UnorderedList>
-      ) : (
-        <Text mt={3}>Aucune donnée de disponibilité trouvée.</Text>
-      )}
-
+            {availabilityData ? (
+              <UnorderedList mt={3} spacing={2} listStyleType="none">
+                {Object.entries(availabilityData).map(
+                  ([day, slots]: [string, any]) => (
+                    <ListItem key={day}>
+                      <Stack direction="row" alignItems="center">
+                        <ListIcon as={FaCheckCircle} color="green.500" />
+                        <Text fontWeight="bold">{day}:</Text>
+                      </Stack>
+                      <List spacing={1} ml={6}>
+                        <ListItem>
+                          <Text fontWeight="bold">Matin:</Text>
+                          {Object.entries(slots.matin.creneaux).map(
+                            ([time, slot]: [string, any]) => (
+                              <div key={time}>
+                                {slot.start} - {slot.end}
+                              </div>
+                            )
+                          )}
+                        </ListItem>
+                        <ListItem>
+                          <Text fontWeight="bold">Soir:</Text>
+                          {Object.entries(slots.soir.creneaux).map(
+                            ([time, slot]: [string, any]) => (
+                              <div key={time}>
+                                {slot.start} - {slot.end}
+                              </div>
+                            )
+                          )}
+                        </ListItem>
+                      </List>
+                    </ListItem>
+                  )
+                )}
+              </UnorderedList>
+            ) : (
+              <Text mt={3}>Aucune donnée de disponibilité trouvée.</Text>
+            )}
           </Stack>
           <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
             <ModalOverlay />
