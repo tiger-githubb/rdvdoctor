@@ -9,7 +9,7 @@ import CallToAction from '../../components/CallToAction';
 const Home: React.FC = () => {
 
   return (
-    <Box p={4}>
+    <Box p={0} >
       <Hero />
       <Features />
       <FeaturedProfessionalsSection />
