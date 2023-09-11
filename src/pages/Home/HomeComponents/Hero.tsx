@@ -1,51 +1,89 @@
 'use client'
 
 import {
-  Flex,
   Container,
-  Heading,
   Stack,
+  Flex,
+  Heading,
   Text,
-  Button
+  Button,
 } from '@chakra-ui/react'
+import { Player, Controls } from '@lottiefiles/react-lottie-player'
 
-
-export default function Hero () {
+export default function Hero() {
   return (
-    <Container maxW={'5xl'}>
+    <Container maxW={'7xl'}>
       <Stack
-        textAlign={'center'}
         align={'center'}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 20, md: 28 }}>
-        <Heading
-          fontWeight={600}
-          fontSize={{ base: '3xl', sm: '4xl', md: '6xl' }}
-          lineHeight={'110%'}>
-          Trouvez un rendez-vous avec {' '}
-          <Text as={'span'} color={'orange.400'}>
-            Votre medecin ou docteur
+        py={{ base: 20, md: 28 }}
+        direction={{ base: 'column', md: 'row' }}>
+        <Stack flex={1} spacing={{ base: 5, md: 10 }}>
+          <Heading
+            lineHeight={1.1}
+            fontWeight={600}
+            fontSize={{ base: '3xl', sm: '4xl', lg: '6xl' }}>
+            <Text
+              as={'span'}
+              position={'relative'}
+              _after={{
+                content: "''",
+                width: 'full',
+                height: '30%',
+                position: 'absolute',
+                bottom: 1,
+                left: 0,
+                bg: 'red.400',
+                zIndex: -1,
+              }}>
+              Les rendez-vous
+            </Text>
+            <br />
+            <Text as={'span'} color={'red.400'}>
+              sont faciles avec nous
+            </Text>
+          </Heading>
+          <Text color={'gray.500'}>
+            Prenez soin de votre santé en toute simplicité en utilisant notre plateforme de prise de rendez-vous.Nous sommes déterminés à faciliter l'accès à des soins de qualité en mettant en relation les patients et les professionnels de santé de confiance.
           </Text>
-        </Heading>
-        <Text color={'gray.500'} maxW={'3xl'}>
-          Texte de description de la solution
-        </Text>
-        <Stack spacing={6} direction={'row'}>
-          <Button
-            rounded={'full'}
-            px={6}
-            colorScheme={'orange'}
-            bg={'orange.400'}
-            _hover={{ bg: 'orange.500' }}>
-            Commencez
-          </Button>
-          <Button rounded={'full'} px={6}>
-            En savoir plus
-          </Button>
+          <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: 'column', sm: 'row' }}>
+            <Button
+              rounded={'full'}
+              size={'lg'}
+              fontWeight={'normal'}
+              px={4}
+              colorScheme={'red'}
+              bg={'red.400'}
+              _hover={{ bg: 'red.500' }}>
+              Prendre un rendez-vous
+            </Button>
+            <Button
+              rounded={'full'}
+              size={'lg'}
+              fontWeight={'normal'}
+              px={6}
+            >
+              En savoir plus
+            </Button>
+          </Stack>
         </Stack>
-        <Flex w={'full'}>
+        <Flex
+          flex={1}
+          justify={'center'}
+          align={'center'}
+          position={'relative'}
+          w={'full'}>
+            <Player
+              autoplay
+              loop
+              src="https://lottie.host/59b1e30e-09b7-41e4-9fb9-b3afa2720d72/7KBLOOz4IS.json"
+              style={{ height: '600px', width: '600px' }}
+            >
+              <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
+            </Player>
         </Flex>
       </Stack>
     </Container>
   )
 }
+

@@ -1,18 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import {
-//   Box,
-//   Flex,
-//   Heading,
-//   Text,
-//   Image,
-//   Button,
-//   Divider,
-//   Stack,
-//   ListItem,
-//   UnorderedList,
-//   List,
-//   ListIcon,
-// } from "@chakra-ui/react";
+
 import {
   Box,
   Container,
