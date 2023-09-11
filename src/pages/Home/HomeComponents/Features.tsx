@@ -41,7 +41,7 @@ const Feature = ({ text, icon, iconBg }: FeatureProps) => {
 
 export default function features() {
   return (
-    <Container maxW={"6xl"} py={12}>
+    <Container maxW={"6xl"} py={12} mb={6}>
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
         <Stack spacing={4}>
           <Text
@@ -66,7 +66,6 @@ export default function features() {
             spacing={4}
             divider={
               <StackDivider
-              // borderColor={useColorModeValue('gray.100', 'gray.700')}
               />
             }
           >

@@ -12,7 +12,7 @@ import { Player, Controls } from '@lottiefiles/react-lottie-player'
 
 export default function Hero() {
   return (
-    <Container maxW={'6xl'}>
+    <Container maxW={'6xl'} >
       <Stack
         align={'center'}
         spacing={{ base: 8, md: 10,lg:0  }}
