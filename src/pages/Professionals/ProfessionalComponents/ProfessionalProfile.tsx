@@ -25,7 +25,6 @@ import { FaCheckCircle } from "react-icons/fa";
 import { ProfessionalData } from "../ProfessionalsPage";
 import { getAuth } from "firebase/auth";
 
-
 interface Slot {
   reserved: boolean;
   reservedBy: string | null;
@@ -79,29 +78,6 @@ const ProfessionalProfile: React.FC = () => {
     });
   }, [uid]);
 
-  const updateDataInFirebase = (
-    professionnelId: any,
-    day: any,
-    period: any,
-    time: any,
-    reserved: boolean
-  ) => {
-    const db = getDatabase();
-
-    const availabilityRef = ref(
-      db,
-      `professionnels/${professionnelId}/disponibilites/${day}/${period}/creneaux/${time}/reserved`
-    );
-
-    set(availabilityRef, reserved)
-      .then(() => {
-        console.log('Etat reservation:',reserved);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
   const handleButtonClick = (
     day: string,
     period: string,
@@ -110,22 +86,32 @@ const ProfessionalProfile: React.FC = () => {
   ) => {
     const { reserved, reservedBy } = slot;
     let updatedSlot: Slot;
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-  const alreadyReservedByUser = reservedBy === currentUserUid;
+    if (!user) {
+      console.log("Veuillez vous connecter avant de faire une réservation.");
+      return;
+    }
+    const alreadyReservedByUser = reservedBy === currentUserUid;
 
-  if (alreadyReservedByUser) {
-    updatedSlot = {
-      ...slot,
-      reserved: false,
-      reservedBy: null,
-    };
-  } else {
-    updatedSlot = {
-      ...slot,
-      reserved: !reserved,
-      reservedBy: currentUserUid,
-    };
-  }
+    if (reserved && reservedBy !== currentUserUid) {
+      console.log("Ce créneau est déjà réservé par un autre utilisateur.");
+      return;
+    }
+    if (alreadyReservedByUser) {
+      updatedSlot = {
+        ...slot,
+        reserved: false,
+        reservedBy: null,
+      };
+    } else {
+      updatedSlot = {
+        ...slot,
+        reserved: !reserved,
+        reservedBy: currentUserUid,
+      };
+    }
     setAvailabilityData(
       (prevData: {
         professionnelId: any;
@@ -155,7 +141,7 @@ const ProfessionalProfile: React.FC = () => {
     );
 
     set(availabilityRef, {
-      ...updatedSlot
+      ...updatedSlot,
     });
     updateDataInFirebase(
       professionnelId,
@@ -164,6 +150,29 @@ const ProfessionalProfile: React.FC = () => {
       time,
       updatedSlot.reserved
     );
+  };
+
+  const updateDataInFirebase = (
+    professionnelId: any,
+    day: any,
+    period: any,
+    time: any,
+    reserved: boolean
+  ) => {
+    const db = getDatabase();
+
+    const availabilityRef = ref(
+      db,
+      `professionnels/${professionnelId}/disponibilites/${day}/${period}/creneaux/${time}/reserved`
+    );
+
+    set(availabilityRef, reserved)
+      .then(() => {
+        console.log("Etat reservation:", reserved);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
