@@ -130,9 +130,14 @@ const ProfessionalProfile: React.FC = () => {
                           <Text fontWeight="bold">Matin:</Text>
                           {Object.entries(slots.matin.creneaux).map(
                             ([time, slot]: [string, any]) => (
-                              <div key={time}>
+                              <Button
+                                key={time}
+                                colorScheme={slot.reserved ? "gray" : "blue"} // Choix de couleur en fonction de reserved
+                                variant="outline"
+                                mr={2}
+                              >
                                 {slot.start} - {slot.end}
-                              </div>
+                              </Button>
                             )
                           )}
                         </ListItem>
@@ -140,9 +145,14 @@ const ProfessionalProfile: React.FC = () => {
                           <Text fontWeight="bold">Soir:</Text>
                           {Object.entries(slots.soir.creneaux).map(
                             ([time, slot]: [string, any]) => (
-                              <div key={time}>
+                              <Button
+                                key={time}
+                                colorScheme={slot.reserved ? "gray" : "blue"} // Choix de couleur en fonction de reserved
+                                variant="outline"
+                                mr={2}
+                              >
                                 {slot.start} - {slot.end}
-                              </div>
+                              </Button>
                             )
                           )}
                         </ListItem>
