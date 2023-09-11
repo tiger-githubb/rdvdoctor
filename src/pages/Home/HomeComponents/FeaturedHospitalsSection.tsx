@@ -37,8 +37,8 @@ const FeaturedHospitalsSection: React.FC = () => {
   }, []);
 
   return (
-    <Box py={8} bg="gray.100">
-      <Container maxW="container.xl">
+    <Box w="100%" m={0} p={0} py={12} bg="white">
+      <Container maxW={"6xl"}>
         <Heading as="h2" size="lg" mb={4}>
           Hôpitaux en vedette
         </Heading>

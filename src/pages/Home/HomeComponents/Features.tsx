@@ -1,100 +1,103 @@
-'use client'
+import { FcAlarmClock, FcGlobe, FcTimeline } from "react-icons/fc";
 
 import {
-  Box,
-  Button,
   Container,
+  SimpleGrid,
+  Image,
   Flex,
   Heading,
-  Icon,
-  Stack,
   Text,
-  useColorModeValue,
-} from '@chakra-ui/react'
-import { ReactElement } from 'react'
-import {
+  Stack,
+  StackDivider,
+  Icon,
 
-  FcAssistant,
-  FcCollaboration,
-  FcDonate,
- 
-} from 'react-icons/fc'
+} from "@chakra-ui/react";
 
-interface CardProps {
-  heading: string
-  description: string
-  icon: ReactElement
-  href: string
+import { ReactElement } from "react";
+
+interface FeatureProps {
+  text: string;
+  iconBg: string;
+  icon?: ReactElement;
 }
 
-const Card = ({ heading, description, icon, href }: CardProps) => {
+const Feature = ({ text, icon, iconBg }: FeatureProps) => {
   return (
-    <Box
-      maxW={{ base: 'full', md: '275px' }}
-      w={'full'}
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      p={5}>
-      <Stack align={'start'} spacing={2}>
-        <Flex
-          w={16}
-          h={16}
-          align={'center'}
-          justify={'center'}
-          color={'white'}
-          rounded={'full'}
-          bg={useColorModeValue('gray.100', 'gray.700')}>
-          {icon}
-        </Flex>
-        <Box mt={2}>
-          <Heading size="md">{heading}</Heading>
-          <Text mt={1} fontSize={'sm'}>
-            {description}
+    <Stack direction={"row"} align={"center"}>
+      <Flex
+        w={8}
+        h={8}
+        align={"center"}
+        justify={"center"}
+        rounded={"full"}
+        bg={iconBg}
+      >
+        {icon}
+      </Flex>
+      <Text fontWeight={600}>{text}</Text>
+    </Stack>
+  );
+};
+
+export default function features() {
+  return (
+    <Container maxW={"6xl"} py={12}>
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
+        <Stack spacing={4}>
+          <Text
+            textTransform={"uppercase"}
+            color={"blue.400"}
+            fontWeight={600}
+            fontSize={"sm"}
+            // bg={useColorModeValue('blue.50', 'blue.900')}
+            p={2}
+            alignSelf={"flex-start"}
+            rounded={"md"}
+          >
+            Rdv Doctor
           </Text>
-        </Box>
-        <Button variant={'link'} colorScheme={'blue'} size={'sm'}>
-          Learn more
-        </Button>
-      </Stack>
-    </Box>
-  )
-}
-
-export default function Features() {
-  return (
-    <Box p={4}>
-      <Stack spacing={4} as={Container} maxW={'3xl'} textAlign={'center'}>
-        <Heading fontSize={{ base: '2xl', sm: '4xl' }} fontWeight={'bold'}>
-          Pourquoi nous choisir
-        </Heading>
-        <Text color={'gray.600'} fontSize={{ base: 'sm', sm: 'lg' }}>
-          description de la section
-        </Text>
-      </Stack>
-
-      <Container maxW={'5xl'} mt={12}>
-        <Flex flexWrap="wrap" gridGap={6} justify="center">
-          <Card
-            heading={'Heading'}
-            icon={<Icon as={FcAssistant} w={10} h={10} />}
-            description={'Lorem ipsum dolor sit amet catetur, adipisicing elit.'}
-            href={'#'}
-          />
-          <Card
-            heading={'Heading'}
-            icon={<Icon as={FcCollaboration} w={10} h={10} />}
-            description={'Lorem ipsum dolor sit amet catetur, adipisicing elit.'}
-            href={'#'}
-          />
-          <Card
-            heading={'Heading'}
-            icon={<Icon as={FcDonate} w={10} h={10} />}
-            description={'Lorem ipsum dolor sit amet catetur, adipisicing elit.'}
-            href={'#'}
+          <Heading>Pourquoi choisir RdvDoctor ?</Heading>
+          <Text color={"gray.500"} fontSize={"lg"}>
+            Choisissez RdvDoctor pour une planification simple des rendez-vous
+            médicaux et un large choix de professionnels de santé. Bénéficiez
+            également de rappels, confidentialité et sécurité.
+          </Text>
+          <Stack
+            spacing={4}
+            divider={
+              <StackDivider
+              // borderColor={useColorModeValue('gray.100', 'gray.700')}
+              />
+            }
+          >
+            <Feature
+              icon={<Icon as={FcGlobe} color={"yellow.500"} w={5} h={5} />}
+              iconBg={"yellow.100"}
+              text={"Large réseau de professionnels"}
+            />
+            <Feature
+              icon={<Icon as={FcTimeline} color={"green.500"} w={5} h={5} />}
+              iconBg={"green.100"}
+              text={"Prise de rendez-vous instantanée"}
+            />
+            <Feature
+              icon={<Icon as={FcAlarmClock} color={"purple.500"} w={5} h={5} />}
+              iconBg={"purple.100"}
+              text={"Rappels de rendez-vous"}
+            />
+          </Stack>
+        </Stack>
+        <Flex>
+          <Image
+            rounded={"md"}
+            alt={"feature image"}
+            src={
+              "https://images.unsplash.com/photo-1554200876-56c2f25224fa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            }
+            objectFit={"cover"}
           />
         </Flex>
-      </Container>
-    </Box>
-  )
+      </SimpleGrid>
+    </Container>
+  );
 }

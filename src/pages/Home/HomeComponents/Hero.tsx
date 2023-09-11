@@ -12,11 +12,11 @@ import { Player, Controls } from '@lottiefiles/react-lottie-player'
 
 export default function Hero() {
   return (
-    <Container maxW={'7xl'}>
+    <Container maxW={'6xl'}>
       <Stack
         align={'center'}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 20, md: 28 }}
+        py={{ base: 15, md: 8 }}
         direction={{ base: 'column', md: 'row' }}>
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
           <Heading
@@ -77,7 +77,7 @@ export default function Hero() {
               autoplay
               loop
               src="https://lottie.host/59b1e30e-09b7-41e4-9fb9-b3afa2720d72/7KBLOOz4IS.json"
-              style={{ height: '600px', width: '600px' }}
+              style={{ height: '600px', width: '400px' }}
             >
               <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
             </Player>

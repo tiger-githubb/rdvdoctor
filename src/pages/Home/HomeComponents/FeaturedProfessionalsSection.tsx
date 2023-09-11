@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Container, Heading, SimpleGrid } from '@chakra-ui/react';
-import ProfesionalCard from '../../../components/ProfesionalCard';
-import { collection } from 'firebase/firestore';
-import { db } from '../../../services/firebase';
-import { getDocs } from 'firebase/firestore';
+import React, { useState, useEffect } from "react";
+import { Box, Container, Heading, SimpleGrid } from "@chakra-ui/react";
+import ProfesionalCard from "../../../components/ProfesionalCard";
+import { collection } from "firebase/firestore";
+import { db } from "../../../services/firebase";
+import { getDocs } from "firebase/firestore";
 
 interface ProfessionalData {
   uid: string;
@@ -18,10 +18,10 @@ interface ProfessionalData {
   speciality?: string;
 }
 
-
-
 const FeaturedProfessionalsSection: React.FC = () => {
-  const [professionalsData, setProfessionalsData] = useState<ProfessionalData[]>([]);
+  const [professionalsData, setProfessionalsData] = useState<
+    ProfessionalData[]
+  >([]);
 
   const fetchProfessionalData = async () => {
     try {
@@ -30,30 +30,33 @@ const FeaturedProfessionalsSection: React.FC = () => {
 
       const professionalsDataArray: ProfessionalData[] = [];
       professionalsSnapshot.forEach((doc) => {
-        const professionalData = doc.data();
-        professionalsDataArray.push(professionalData as ProfessionalData);
+        const professionalData = doc.data() as ProfessionalData;
+        if (professionalData.role === 1) {
+          professionalsDataArray.push(professionalData);
+        }
       });
       setProfessionalsData(professionalsDataArray);
-
     } catch (error) {
       console.log("un probleme est survenu :", error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchProfessionalData();
   }, []);
   return (
-    <Box py={8} bg="gray.100">
-      <Container maxW="container.xl">
-        
+    <Box w="100%"  m={0} p={0} py={12} bg="gray.100">
+      <Container maxW={"6xl"}>
         <Heading as="h2" size="lg" mb={4}>
           Professionnels de santé en vedette
         </Heading>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-        {professionalsData.map((professional) => (
-          <ProfesionalCard key={professional.uid} professional={professional} />
-        ))}
+          {professionalsData.map((professional) => (
+            <ProfesionalCard
+              key={professional.uid}
+              professional={professional}
+            />
+          ))}
         </SimpleGrid>
       </Container>
     </Box>
@@ -61,6 +64,3 @@ const FeaturedProfessionalsSection: React.FC = () => {
 };
 
 export default FeaturedProfessionalsSection;
-
-
-
