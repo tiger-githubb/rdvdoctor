@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Container, Heading, SimpleGrid } from '@chakra-ui/react';
 import HospitalCard from '../../../components/HospitalCard';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { db } from '../../../services/firebase';
 
 interface HospitalData {
@@ -19,7 +19,9 @@ const FeaturedHospitalsSection: React.FC = () => {
   const fetchFeaturedHospitals = async () => {
     try {
       const hospitalsCollectionRef = collection(db, 'hospitals');
-      const hospitalsSnapshot = await getDocs(hospitalsCollectionRef);
+      const q = query(hospitalsCollectionRef, orderBy('created_at', 'desc'), limit(3));
+
+      const hospitalsSnapshot = await getDocs(q);
 
       const hospitalsDataArray: HospitalData[] = [];
       hospitalsSnapshot.forEach((doc) => {

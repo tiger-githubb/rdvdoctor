@@ -29,9 +29,10 @@ const FeaturedProfessionalsSection: React.FC = () => {
       const professionalsSnapshot = await getDocs(professionalCollectionRef);
 
       const professionalsDataArray: ProfessionalData[] = [];
+      let count = 0; 
       professionalsSnapshot.forEach((doc) => {
         const professionalData = doc.data() as ProfessionalData;
-        if (professionalData.role === 1) {
+        if (professionalData.role === 1 && count < 3) {
           professionalsDataArray.push(professionalData);
         }
       });
