@@ -25,26 +25,6 @@ import { FaCheckCircle } from "react-icons/fa";
 import { ProfessionalData } from "../ProfessionalsPage";
 import { getAuth } from "firebase/auth";
 
-interface AvailabilityData {
-  [key: string]: {
-    matin: {
-      creneaux: {
-        [key: string]: {
-          reserved: boolean;
-          reservedBy: string | null;
-        };
-      };
-    };
-    soir: {
-      creneaux: {
-        [key: string]: {
-          reserved: boolean;
-          reservedBy: string | null;
-        };
-      };
-    };
-  };
-}
 
 interface Slot {
   reserved: boolean;
@@ -61,7 +41,6 @@ const ProfessionalProfile: React.FC = () => {
   );
   const { uid } = useParams<{ uid: string }>();
   const [availabilityData, setAvailabilityData] = useState<any | null>(null);
-  // const [availabilityData, setAvailabilityData] = useState<AvailabilityData | null>(null);
 
   useEffect(() => {
     const fetchProfessionalData = async () => {
@@ -105,9 +84,7 @@ const ProfessionalProfile: React.FC = () => {
     day: any,
     period: any,
     time: any,
-    // newReservedValue: unknown
     reserved: boolean
-
   ) => {
     const db = getDatabase();
 
@@ -118,7 +95,7 @@ const ProfessionalProfile: React.FC = () => {
 
     set(availabilityRef, reserved)
       .then(() => {
-        console.log("Mise à jour réussie");
+        console.log('Etat reservation:',reserved);
       })
       .catch((error) => {
         console.error(error);
@@ -129,7 +106,6 @@ const ProfessionalProfile: React.FC = () => {
     day: string,
     period: string,
     time: string,
-    // slot: { reserved: any; reservedBy: any }
     slot: Slot
   ) => {
     const { reserved, reservedBy } = slot;
@@ -179,8 +155,7 @@ const ProfessionalProfile: React.FC = () => {
     );
 
     set(availabilityRef, {
-      ...updatedSlot,
-      reservedBy: currentUserUid,
+      ...updatedSlot
     });
     updateDataInFirebase(
       professionnelId,
