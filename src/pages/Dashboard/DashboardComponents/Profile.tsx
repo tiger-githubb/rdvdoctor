@@ -24,15 +24,22 @@ export default function Profile() {
           });
 
           setLoading(false); 
+        } else {
+          console.log("Aucun utilisateur connecté");
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
         setLoading(false);
+        
       }
     };
 
     fetchUserData();
   }, []);
+
+  console.log("userData:", userData);
+  console.log("loading:", loading);
 
   return (
     <Stack maxH={"50vh"} direction={{ base: "column", md: "row" }}>

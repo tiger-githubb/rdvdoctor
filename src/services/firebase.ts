@@ -5,8 +5,6 @@ import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
 
-
-
 const firebaseConfig = {
   apiKey: "AIzaSyD-KAQS3tzcm73ZHBlLUfI_t5R9a5acsQE",
   authDomain: "rdvdoctor-d36a1.firebaseapp.com",
@@ -16,7 +14,7 @@ const firebaseConfig = {
   appId: "1:608032171899:web:9edc8390302cce5c383fde",
   databaseURL:"https://rdvdoctor-d36a1-default-rtdb.firebaseio.com/"
 };
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth();
