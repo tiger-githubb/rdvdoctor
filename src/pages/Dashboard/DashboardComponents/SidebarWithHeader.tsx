@@ -35,7 +35,6 @@ import {
 import { IconType } from 'react-icons'
 import Profile from './Profile'
 import UpdateProfileForm from './UpdateProfileForm'
-import UploadFiles from './UploadFiles'
 import FileUploader from './UploadFiles'
 
 interface LinkItemProps {
