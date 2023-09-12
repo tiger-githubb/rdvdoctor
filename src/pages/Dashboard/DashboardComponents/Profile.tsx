@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Flex, Heading, Image, Stack, Text } from "@chakra-ui/react";
+import { Flex, Heading, Image, Stack, Text, Spinner } from "@chakra-ui/react";
 import { auth, db } from "../../../services/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default function Profile() {
   const [userData, setUserData] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -21,9 +22,12 @@ export default function Profile() {
             const userDataFromDoc = doc.data();
             setUserData(userDataFromDoc);
           });
+
+          setLoading(false); 
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setLoading(false);
       }
     };
 
@@ -51,7 +55,8 @@ export default function Profile() {
           </Heading>
           <Heading as="h5" size="sm">
             {userData
-              ? userData.date_of_birth : "date de naissance l'utilisateur"}
+              ? userData.date_of_birth
+              : "date de naissance de l'utilisateur"}
           </Heading>
           <Text fontSize={{ base: "md", lg: "md" }} color={"gray.500"}>
             {userData ? userData.description : "description de l'utilisateur"}
@@ -59,13 +64,15 @@ export default function Profile() {
         </Stack>
       </Flex>
       <Flex flex={1}>
-        <Image
-          alt={"profile"}
-          objectFit={"cover"}
-          src={
-            userData ? userData.profile_image :""
-          }
-        />
+        {loading ? (
+          <Spinner size="lg" />
+        ) : (
+          <Image
+            alt={"profile"}
+            objectFit={"cover"}
+            src={userData ? userData.profile_image : ""}
+          />
+        )}
       </Flex>
     </Stack>
   );

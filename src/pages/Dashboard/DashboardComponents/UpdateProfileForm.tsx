@@ -5,6 +5,11 @@ import {
   Button,
   FormControl,
   FormLabel,
+  Box,
+  Flex,
+  Stack,
+  useColorModeValue,
+  Grid,
 } from "@chakra-ui/react";
 import { auth, db } from "../../../services/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
@@ -95,27 +100,41 @@ const UpdateProfileForm: FC = () => {
     }
   };
   return (
-    <>
+<Flex
+  minH={'100vh'}
+  align={'left'}
+  justify={'left'}
+  bg={useColorModeValue('gray.50', 'gray.800')}
+>
+  <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+    <Box
+      rounded={'lg'}
+      bg={useColorModeValue('white', 'gray.700')}
+      boxShadow={'lg'}
+      p={8}
+    >
       <form onSubmit={handleSubmit}>
-        <FormControl>
-          <FormLabel>Nom d'utilisateur</FormLabel>
-          <Input
-            value={formValues.displayName}
-            onChange={(e) =>
-              setFormValues({ ...formValues, displayName: e.target.value })
-            }
-          />
-        </FormControl>
+        <Grid templateColumns={{ sm: '1fr', md: 'repeat(2, 1fr)' }} gap={4}>
+          <FormControl>
+            <FormLabel>Nom d'utilisateur</FormLabel>
+            <Input
+              value={formValues.displayName}
+              onChange={(e) =>
+                setFormValues({ ...formValues, displayName: e.target.value })
+              }
+            />
+          </FormControl>
 
-        <FormControl>
-          <FormLabel>Numéro de téléphone</FormLabel>
-          <Input
-            value={formValues.phone_number}
-            onChange={(e) =>
-              setFormValues({ ...formValues, phone_number: e.target.value })
-            }
-          />
-        </FormControl>
+          <FormControl>
+            <FormLabel>Numéro de téléphone</FormLabel>
+            <Input
+              value={formValues.phone_number}
+              onChange={(e) =>
+                setFormValues({ ...formValues, phone_number: e.target.value })
+              }
+            />
+          </FormControl>
+        </Grid>
 
         <FormControl>
           <FormLabel>Description</FormLabel>
@@ -148,22 +167,16 @@ const UpdateProfileForm: FC = () => {
           />
         </FormControl>
 
-        {/* <FormControl>
-          <FormLabel>Image de profil</FormLabel>
-          <Input
-            type="file"
-            onChange={(e) =>
-              setFormValues({ ...formValues, profile_image: e.target.files[0] })
-            }
-          />
-          <Image src={formValues.profile_image} />
-        </FormControl> */}
+        {/* Ajoutez le champ pour l'image de profil ici, si nécessaire */}
 
-        <Button type="submit" colorScheme="blue">
+        <Button type="submit" colorScheme="blue" mt={4}>
           Mettre à jour le profil
         </Button>
       </form>
-    </>
+    </Box>
+  </Stack>
+</Flex>
+
   );
 };
 
