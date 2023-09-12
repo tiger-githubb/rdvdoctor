@@ -14,32 +14,42 @@ import {
 import { auth, db } from "../../../services/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { updateDoc, doc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 const UpdateProfileForm: FC = () => {
   const [userData, setUserData] = useState<any | null>(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const user = auth.currentUser;
-        if (user) {
-          const q = query(
-            collection(db, "users"),
-            where("uid", "==", user.uid)
-          );
-          const querySnapshot = await getDocs(q);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const fetchUserData = async () => {
+          try {
+            const user = auth.currentUser;
+            if (user) {
+              const q = query(
+                collection(db, "users"),
+                where("uid", "==", user.uid)
+              );
+              const querySnapshot = await getDocs(q);
 
-          querySnapshot.forEach((doc) => {
-            const userDataFromDoc = doc.data();
-            setUserData(userDataFromDoc);
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
+              querySnapshot.forEach((doc) => {
+                const userDataFromDoc = doc.data();
+                setUserData(userDataFromDoc);
+              });
+
+            } else {
+              console.log("Aucun utilisateur connecté");
+            }
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+          }
+        };
+
+        fetchUserData();
+      } else {
+        console.log("l'utilisateur n'est pas connecté");
       }
-    };
-
-    fetchUserData();
+    });
   }, []);
 
   const initialValues = {

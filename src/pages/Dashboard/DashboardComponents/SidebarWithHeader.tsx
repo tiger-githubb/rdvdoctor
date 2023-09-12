@@ -219,9 +219,8 @@ const SidebarWithHeader = () => {
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
       <Box ml={{ base: 0, md: 40 }} p="4" pt={40}>
-        <Profile/>
-        <UpdateProfileForm/>
-        <FileUploader/>
+       
+
       </Box>
     </Box>
   )
