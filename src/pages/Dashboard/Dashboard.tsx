@@ -5,7 +5,7 @@ import SidebarWithHeader from './DashboardComponents/SidebarWithHeader';
 const Dashboard = () => {
 
   return (
-    <Box p={4} >
+    <Box p={2} >
       <SidebarWithHeader />
       
     </Box>
