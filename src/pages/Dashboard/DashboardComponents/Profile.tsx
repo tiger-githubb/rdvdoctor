@@ -1,44 +1,69 @@
-"use client";
-
-import {
-  Button,
-  Flex,
-  Heading,
-  Image,
-  Stack,
-  Text,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Flex, Heading, Image, Stack, Text } from "@chakra-ui/react";
+import { auth, db } from "../../../services/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default function Profile() {
+  const [userData, setUserData] = useState<any | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const q = query(
+            collection(db, "users"),
+            where("uid", "==", user.uid)
+          );
+          const querySnapshot = await getDocs(q);
+
+          querySnapshot.forEach((doc) => {
+            const userDataFromDoc = doc.data();
+            setUserData(userDataFromDoc);
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   return (
-    <Stack maxH={"100vh"} direction={{ base: "column", md: "row" }}>
+    <Stack maxH={"50vh"} direction={{ base: "column", md: "row" }}>
       <Flex p={8} flex={1} align={"center"} justify={"left"}>
         <Stack spacing={2} w={"full"} maxW={"lg"}>
           <Heading as="h3" size="lg">
-            user name
+            {userData ? userData.displayName : ""}
           </Heading>
           <Heading as="h5" size="sm">
-            email
+            {userData ? userData.email : ""}
           </Heading>
           <Heading as="h5" size="sm">
-            groupe sanguin
+            {userData ? userData.phone_number : "Téléphone de l'utilisateur"}
           </Heading>
           <Heading as="h5" size="sm">
-           telephone
+            {userData ? userData.address : "Adresse de l'utilisateur"}
+          </Heading>
+          <Heading as="h5" size="sm">
+            {userData ? userData.bloodGroup : "Groupe sanguin de l'utilisateur"}
+          </Heading>
+          <Heading as="h5" size="sm">
+            {userData
+              ? userData.date_of_birth : "date de naissance l'utilisateur"}
           </Heading>
           <Text fontSize={{ base: "md", lg: "md" }} color={"gray.500"}>
-            The project board is an exclusive resource for contract work.
-           perfect for freelancers, agencies, and moonlighters.
+            {userData ? userData.description : "description de l'utilisateur"}
           </Text>
         </Stack>
       </Flex>
       <Flex flex={1}>
         <Image
-          alt={"Login Image"}
+          alt={"profile"}
           objectFit={"cover"}
           src={
-            "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+            userData ? userData.profile_image :""
           }
         />
       </Flex>
