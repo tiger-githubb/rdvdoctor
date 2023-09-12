@@ -35,6 +35,8 @@ import {
 import { IconType } from 'react-icons'
 import Profile from './Profile'
 import UpdateProfileForm from './UpdateProfileForm'
+import UploadFiles from './UploadFiles'
+import FileUploader from './UploadFiles'
 
 interface LinkItemProps {
   name: string
@@ -220,6 +222,7 @@ const SidebarWithHeader = () => {
       <Box ml={{ base: 0, md: 40 }} p="4" pt={40}>
         <Profile/>
         <UpdateProfileForm/>
+        <FileUploader/>
       </Box>
     </Box>
   )
