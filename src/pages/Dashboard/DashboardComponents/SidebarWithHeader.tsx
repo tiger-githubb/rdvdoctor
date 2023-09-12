@@ -34,6 +34,7 @@ import {
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import Profile from './Profile'
+import UpdateProfileForm from './UpdateProfileForm'
 
 interface LinkItemProps {
   name: string
@@ -218,6 +219,7 @@ const SidebarWithHeader = () => {
       <MobileNav onOpen={onOpen} />
       <Box ml={{ base: 0, md: 40 }} p="4" pt={40}>
         <Profile/>
+        <UpdateProfileForm/>
       </Box>
     </Box>
   )
