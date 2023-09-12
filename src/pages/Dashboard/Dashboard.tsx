@@ -5,7 +5,7 @@ import Profile from './DashboardComponents/Profile';
 const Dashboard = () => {
 
   return (
-    <Box p={2} >
+    <Box p={2} mt={20}>
       <Profile/>
     </Box>
   );
