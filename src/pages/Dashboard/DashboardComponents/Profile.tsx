@@ -6,6 +6,7 @@ interface ProfileProps {
 }
 
 export default function Profile({ userData, loading }: ProfileProps) {
+  
 
   return (
     <Stack maxH={"50vh"} direction={{ base: "column", md: "row" }}>
