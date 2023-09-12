@@ -9,8 +9,8 @@ import ProfessionalsPage from "../pages/Professionals/ProfessionalsPage";
 import Footer from "../components/Footer";
 import SearchProfessionalsPage from "../pages/SearchProfessionalsPage/SearchProfessionalsPage";
 import ProfessionalProfilePage from "../pages/Professionals/ProfessionalProfilePage";
+// eslint-disable-next-line 
 import PrivateRoute from "./PrivateRoute";
-
 
 const AppRoutes: React.FC = () => {
   return (
@@ -22,10 +22,11 @@ const AppRoutes: React.FC = () => {
       <Route path="/proffesionels" element={<ProfessionalsPage />} />
       <Route path="/recherche" element={<SearchProfessionalsPage />} />
       <Route path="/proffesionels/:uid" element={<ProfessionalProfilePage />} />
-      <Route
+      {/* <Route
         path="/dashboard"
         element={<PrivateRoute element={<Dashboard />} />}
-      />
+      /> */}
+      <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   );
 };
