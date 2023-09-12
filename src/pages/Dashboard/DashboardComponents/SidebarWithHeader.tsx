@@ -123,15 +123,21 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   return (
     <Flex
-      ml={{ base: 0, md: 40 }}
-      px={{ base: 4, md: 0 }}
-      height="12"
-      alignItems="center"
-      bg={useColorModeValue('white', 'gray.900')}
-      borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
-      justifyContent={{ base: 'space-between', md: 'flex-end' }}
-      {...rest}>
+    position="fixed"
+    top={70}
+    right="0"
+    left="0"
+    zIndex={{ base: 998, md: 999 }}
+    ml={{ base: 0, md: 40 }}
+    px={{ base: 4, md: 0 }}
+    height="20"
+    alignItems="center"
+    bg={useColorModeValue('white', 'gray.900')}
+    borderBottomWidth="1px"
+    borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
+    justifyContent={{ base: 'space-between', md: 'flex-end' }}
+    // {...rest}
+  >
       <IconButton
         display={{ base: 'flex', md: 'none' }}
         onClick={onOpen}
@@ -148,7 +154,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         Logo
       </Text>
 
-      <HStack spacing={{ base: '0', md: '6' }}>
+      <HStack spacing={{ base: '0', md: '6' }} >
         <IconButton size="lg" variant="ghost" aria-label="open menu" icon={<FiBell />} />
         <Flex alignItems={'center'}>
           <Menu>
@@ -195,7 +201,7 @@ const SidebarWithHeader = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Box minH="md" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box  minH="md" bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
       <Drawer
         isOpen={isOpen}
@@ -210,7 +216,7 @@ const SidebarWithHeader = () => {
       </Drawer>
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <Box ml={{ base: 0, md: 40 }} p="4" pt={40}>
         <Profile/>
       </Box>
     </Box>

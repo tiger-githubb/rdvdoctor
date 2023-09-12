@@ -27,8 +27,20 @@ export default function WithSubnavigation() {
     const { isOpen, onToggle } = useDisclosure()
 
     return (
-        <Box>
+        <Box  position="fixed"
+        top="0"
+        right="0"
+        left="0"
+        zIndex="999" 
+        bg={useColorModeValue('white', 'gray.800')}
+        color={useColorModeValue('gray.600', 'white')}
+        minH={'50px'}
+        py={{ base: 2 }}
+        px={{ base: 10 }}
+
+        >
             <Flex
+            
                 bg={useColorModeValue('white', 'gray.800')}
                 color={useColorModeValue('gray.600', 'white')}
                 minH={'60px'}
@@ -144,6 +156,7 @@ const DesktopNav = () => {
 const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
     return (
         <Box
+        
             as="a"
             href={href}
             role={'group'}
@@ -190,7 +203,7 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
     const { isOpen, onToggle } = useDisclosure()
 
     return (
-        <Stack spacing={4} onClick={children && onToggle}>
+        <Stack spacing={4} onClick={children && onToggle} >
             <Box
                 py={2}
                 as="a"
