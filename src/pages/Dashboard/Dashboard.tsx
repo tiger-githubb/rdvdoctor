@@ -7,6 +7,7 @@ const Dashboard = () => {
   return (
     <Box p={4} >
       <SidebarWithHeader />
+      
     </Box>
   );
 };
