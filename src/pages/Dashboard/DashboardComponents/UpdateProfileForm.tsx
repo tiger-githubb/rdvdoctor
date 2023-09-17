@@ -15,13 +15,10 @@ import { auth, db, storage } from "../../../services/firebase";
 import {
   updateDoc,
   doc,
-  addDoc,
-  collection,
   getFirestore,
-  setDoc,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
-import { log } from "console";
+
 
 interface UpdateProfileFormProps {
   userData: any;
@@ -29,6 +26,7 @@ interface UpdateProfileFormProps {
 
 const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   const [file, setFile] = useState<File | null>(null);
+  // eslint-disable-next-line
   const [fileUrl, setFileUrl] = useState<string | null>(null);
 
   const initialValues = {
@@ -38,6 +36,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
     date_of_birth: userData?.date_of_birth || "",
     profile_image: userData?.profile_image || "",
     displayName: userData?.displayName || "",
+    bloodGroup: userData?.bloodGroup || "",
   };
   useEffect(() => {
     if (userData) {
@@ -48,6 +47,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
         date_of_birth: userData.date_of_birth || "",
         profile_image: userData.profile_image || "",
         displayName: userData.displayName || "",
+        bloodGroup: userData.bloodGroup || "",
       });
     }
   }, [userData]);
@@ -62,22 +62,15 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   const handleFileUpload = async () => {
     if (file) {
       const storage = getStorage();
-      console.log(file.name);
-      console.log(userData.uid);
-      
       const storageRef = ref(storage, `profile_images/${userData.uid}/${file.name}`);
 
       try {
         await uploadBytes(storageRef, file);
-
         const downloadURL = await getDownloadURL(storageRef);
         setFileUrl(downloadURL);
-
         const db = getFirestore();
         const userprofileRef = doc(db, "users",`${userData.uid}`);
         await updateDoc(userprofileRef, { profile_image: downloadURL });
-
-        alert("Le fichier a été téléchargé avec succès !");
       } catch (error) {
         console.error("Erreur lors de l'envoi du fichier : ", error);
         alert("Une erreur s'est produite lors de l'envoi du fichier.");
@@ -111,6 +104,8 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
           description: formValues.description,
           address: formValues.address,
           date_of_birth: formValues.date_of_birth,
+          bloodGroup: formValues.bloodGroup,
+          
         });
         console.log("Réussi");
       }
@@ -178,6 +173,16 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
                 value={formValues.address}
                 onChange={(e) =>
                   setFormValues({ ...formValues, address: e.target.value })
+                }
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Groupe sanguin</FormLabel>
+              <Input
+                value={formValues.bloodGroup}
+                onChange={(e) =>
+                  setFormValues({ ...formValues, bloodGroup: e.target.value })
                 }
               />
             </FormControl>
