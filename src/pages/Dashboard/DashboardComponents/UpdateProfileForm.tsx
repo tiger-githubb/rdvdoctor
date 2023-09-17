@@ -59,6 +59,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
       setFile(e.target.files[0]);
     }
   };
+  
   const handleFileUpload = async () => {
     if (file) {
       const storage = getStorage();

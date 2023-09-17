@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Box } from '@chakra-ui/react';
-import Profile from './DashboardComponents/Profile';
-import UpdateProfileForm from './DashboardComponents/UpdateProfileForm';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { query, collection, where, getDocs } from 'firebase/firestore';
-import { db } from '../../services/firebase';
+import React, { useEffect, useState } from "react";
+import { Box } from "@chakra-ui/react";
+import Profile from "./DashboardComponents/Profile";
+import UpdateProfileForm from "./DashboardComponents/UpdateProfileForm";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { query, collection, where, getDocs } from "firebase/firestore";
+import { db } from "../../services/firebase";
+import MedicalFileUpload from "./DashboardComponents/MedicalFileUpload";
 
 const Dashboard: React.FC = () => {
   const [userData, setUserData] = useState<any | null>(null);
@@ -16,7 +17,10 @@ const Dashboard: React.FC = () => {
       if (user) {
         const fetchUserData = async () => {
           try {
-            const q = query(collection(db, "users"), where("uid", "==", user.uid));
+            const q = query(
+              collection(db, "users"),
+              where("uid", "==", user.uid)
+            );
             const querySnapshot = await getDocs(q);
 
             querySnapshot.forEach((doc) => {
@@ -42,11 +46,9 @@ const Dashboard: React.FC = () => {
     <Box p={2} mt={20}>
       <Profile userData={userData} loading={loading} />
       <UpdateProfileForm userData={userData} />
+      <MedicalFileUpload userData={userData} />
     </Box>
   );
 };
 
-
 export default Dashboard;
-
-

@@ -33,9 +33,6 @@ import {
   FiChevronDown,
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
-import Profile from './Profile'
-import UpdateProfileForm from './UpdateProfileForm'
-import FileUploader from './UploadFiles'
 
 interface LinkItemProps {
   name: string
