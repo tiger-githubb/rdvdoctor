@@ -7,7 +7,7 @@ import ProfessionalList from './SearchProfessionalsComponents/ProfessionalList';
 const SearchProfessionalsPage: React.FC = () => {
   return (
     <>
-      <Container maxW="container.xl" mt={8}>
+      <Container maxW="container.xl" mt={20}>
        <SearchBar/>
        <ProfessionalList/>
       </Container>

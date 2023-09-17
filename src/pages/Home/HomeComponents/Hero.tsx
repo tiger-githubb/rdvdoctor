@@ -16,7 +16,7 @@ export default function Hero() {
       <Stack
         align={'center'}
         spacing={{ base: 8, md: 10,lg:0  }}
-        pt={{ base: 5, md: 10 ,lg:0 }}
+        pt={{ base: 5, md: 10 ,lg:10 }}
         direction={{ base: 'column', md: 'row' }}>
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
           <Heading
@@ -36,11 +36,11 @@ export default function Hero() {
                 bg: 'red.400',
                 zIndex: -1,
               }}>
-              Les rendez-vous
+              Les rendez-vous avec RdvDoctor
             </Text>
             <br />
             <Text as={'span'} color={'red.400'}>
-              sont faciles avec nous
+              c'est facile
             </Text>
           </Heading>
           <Text color={'gray.500'}>
@@ -78,7 +78,7 @@ export default function Hero() {
               autoplay
               loop
               src="https://lottie.host/59b1e30e-09b7-41e4-9fb9-b3afa2720d72/7KBLOOz4IS.json"
-              style={{ height: '600px', width: '400px' }}
+              style={{ height: '600px', width: '500px' }}
             >
               <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
             </Player>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Input,
   Textarea,
@@ -11,35 +11,79 @@ import {
   useColorModeValue,
   Grid,
 } from "@chakra-ui/react";
-import { auth, db } from "../../../services/firebase";
-import { updateDoc, doc } from "firebase/firestore";
+import { auth, db, storage } from "../../../services/firebase";
+import {
+  updateDoc,
+  doc,
+  addDoc,
+  collection,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
+import { log } from "console";
 
 interface UpdateProfileFormProps {
   userData: any;
 }
-const UpdateProfileForm: React.FC<UpdateProfileFormProps> = ({ userData }) => {
+
+const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
+  const [file, setFile] = useState<File | null>(null);
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+
   const initialValues = {
     phone_number: userData?.phone_number || "",
     description: userData?.description || "",
     address: userData?.address || "",
     date_of_birth: userData?.date_of_birth || "",
+    profile_image: userData?.profile_image || "",
     displayName: userData?.displayName || "",
   };
   useEffect(() => {
-
     if (userData) {
       setFormValues({
         phone_number: userData.phone_number || "",
         description: userData.description || "",
         address: userData.address || "",
         date_of_birth: userData.date_of_birth || "",
+        profile_image: userData.profile_image || "",
         displayName: userData.displayName || "",
       });
-      
     }
   }, [userData]);
-  
   const [formValues, setFormValues] = useState(initialValues);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files[0].name);
+      setFile(e.target.files[0]);
+    }
+  };
+  const handleFileUpload = async () => {
+    if (file) {
+      const storage = getStorage();
+      console.log(file.name);
+      console.log(userData.uid);
+      
+      const storageRef = ref(storage, `profile_images/${userData.uid}/${file.name}`);
+
+      try {
+        await uploadBytes(storageRef, file);
+
+        const downloadURL = await getDownloadURL(storageRef);
+        setFileUrl(downloadURL);
+
+        const db = getFirestore();
+        const userprofileRef = doc(db, "users",`${userData.uid}`);
+        await updateDoc(userprofileRef, { profile_image: downloadURL });
+
+        alert("Le fichier a été téléchargé avec succès !");
+      } catch (error) {
+        console.error("Erreur lors de l'envoi du fichier : ", error);
+        alert("Une erreur s'est produite lors de l'envoi du fichier.");
+      }
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,6 +93,18 @@ const UpdateProfileForm: React.FC<UpdateProfileFormProps> = ({ userData }) => {
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
 
+        if (formValues.profile_image instanceof File) {
+          const storageRef = ref(storage, `profile_images/${user.uid}`);
+          const snapshot = await uploadBytes(
+            storageRef,
+            formValues.profile_image
+          );
+          
+          const imageUrl = await getDownloadURL(snapshot.ref);
+
+          const userDocRef = doc(db, "users", userData.uid);
+          await updateDoc(userDocRef, { profile_image: imageUrl });
+        }
         await updateDoc(userDocRef, {
           phone_number: formValues.phone_number,
           displayName: formValues.displayName,
@@ -56,13 +112,13 @@ const UpdateProfileForm: React.FC<UpdateProfileFormProps> = ({ userData }) => {
           address: formValues.address,
           date_of_birth: formValues.date_of_birth,
         });
-
-        console.log("reusi");
+        console.log("Réussi");
       }
     } catch (error) {
       console.error("Erreur lors de la mise à jour des informations :", error);
     }
   };
+
   return (
     <Flex
       minH={"100vh"}
@@ -83,13 +139,12 @@ const UpdateProfileForm: React.FC<UpdateProfileFormProps> = ({ userData }) => {
                 <FormLabel>Nom d'utilisateur</FormLabel>
                 <Input
                   value={formValues.displayName}
-                  onChange={(e) => {
-                    console.log("New displayName:", e.target.value); // Vérifiez si onChange est déclenché
+                  onChange={(e) =>
                     setFormValues({
                       ...formValues,
                       displayName: e.target.value,
-                    });
-                  }}
+                    })
+                  }
                 />
               </FormControl>
 
@@ -141,9 +196,14 @@ const UpdateProfileForm: React.FC<UpdateProfileFormProps> = ({ userData }) => {
               />
             </FormControl>
 
-            {/* Ajoutez le champ pour l'image de profil ici, si nécessaire */}
+            <FormControl>
+              <FormLabel>Photo de profil</FormLabel>
+              <input type="file" onChange={handleFileChange} />
 
-            <Button type="submit" colorScheme="blue" mt={4}>
+            </FormControl>
+
+
+            <Button type="submit" onClick={handleFileUpload} colorScheme="blue" mt={4}>
               Mettre à jour le profil
             </Button>
           </form>
