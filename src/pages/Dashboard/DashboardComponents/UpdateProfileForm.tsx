@@ -115,11 +115,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   };
 
   return (
-    <Flex
-      minH={"100vh"}
-      align={"left"}
-      justify={"left"}
-      bg={useColorModeValue("gray.50", "gray.800")}
+    <Flex bg={useColorModeValue("gray.50", "gray.800")}
     >
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Box
