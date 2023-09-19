@@ -1,10 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import {
-  Flex,
-  Button,
-  FormLabel,
-  FormControl,
-} from "@chakra-ui/react";
+import { Flex, Button, FormLabel, FormControl } from "@chakra-ui/react";
 import { storage, db, auth } from "../../../services/firebase";
 import { updateDoc, doc, getFirestore } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
@@ -14,23 +9,25 @@ interface MedicalFileFormProps {
 }
 
 const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
-  // eslint-disable-next-line
-  const [fileUrls, setFileUrls] = useState<string[]>([]);
-  // eslint-disable-next-line
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [fichier, setFichier] = useState(userData?.fichier);
+
+  useEffect(() => {
+    if (userData) {
+      setFichier(userData.fichier); 
+    }
+  }, [userData]);
 
   const initialValues = {
     fichier: userData?.fichier,
   };
-  useEffect(() => {
-    if(userData?.Dossier_medical) {
-        setFileUrls(userData.Dossier_medical);
-      }
-  }, [userData]);
-  // eslint-disable-next-line
-  const [formValues, setFormValues] = useState(initialValues);
+
+  const [formValues, setFormValues] = useState<{
+    fichiers: string[];
+  }>({
+    fichiers: [],
+  });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -41,20 +38,20 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
 
   const handleFileUpload = async () => {
     if (file) {
-      const storage = getStorage();
-      
       const storageRef = ref(
-        storage,
+        getStorage(),
         `Dossier_medical/${userData.uid}/${file.name}`
       );
 
       try {
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(storageRef);
-        setFileUrl(downloadURL);
-        const db = getFirestore();
-        const userprofileRef = doc(db, "users", `${userData.uid}`);
-        await updateDoc(userprofileRef, { fichier: downloadURL });
+
+        console.log(downloadURL);
+
+        setFormValues((prevValues) => ({
+          fichiers: [...(prevValues.fichiers), downloadURL],
+        }));
       } catch (error) {
         console.error("Erreur lors de l'envoi du fichier : ", error);
         alert("Une erreur s'est produite lors de l'envoi du fichier.");
@@ -65,27 +62,29 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    setFormValues((prev) => ({
+      ...prev,
+      fichiers: prev.fichiers,
+    }));
     try {
       const user = auth.currentUser;
       if (user) {
-          // eslint-disable-next-line
         const userDocRef = doc(db, "users", user.uid);
 
-        if (formValues.fichier instanceof File) {
-          const storageRef = ref(storage, `Dossier_medical/${user.uid}`);
-          const snapshot = await uploadBytes(storageRef, formValues.fichier);
+        if (formValues.fichiers.length !== 0) {
+          await updateDoc(userDocRef, {
+            fichiers: formValues.fichiers,
+          });
 
-          const imageUrl = await getDownloadURL(snapshot.ref);
-
-          const userDocRef = doc(db, "users", userData.uid);
-          await updateDoc(userDocRef, { fichier: imageUrl });
+          console.log("Réussi");
         }
-        console.log("Réussi");
       }
     } catch (error) {
       console.error("Erreur lors de la mise à jour des informations :", error);
     }
   };
+
+
 
   return (
     <form onSubmit={handleSubmit}>
