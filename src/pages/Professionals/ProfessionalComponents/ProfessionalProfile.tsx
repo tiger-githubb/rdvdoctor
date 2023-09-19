@@ -33,6 +33,7 @@ moment.locale("fr");
 
 interface Slot {
   reserved: boolean;
+  confirmed:boolean;
   reservedBy: string | null;
 }
 
@@ -123,6 +124,7 @@ const ProfessionalProfile: React.FC = () => {
       updatedSlot = {
         ...slot,
         reserved: false,
+        confirmed:false,
         reservedBy: null,
       };
       toast({
@@ -137,6 +139,7 @@ const ProfessionalProfile: React.FC = () => {
       updatedSlot = {
         ...slot,
         reserved: !reserved,
+        confirmed:false,
         reservedBy: currentUserUid,
       };
       toast({
@@ -184,7 +187,8 @@ const ProfessionalProfile: React.FC = () => {
       day,
       period,
       time,
-      updatedSlot.reserved
+      updatedSlot.reserved,
+      updatedSlot.confirmed
     );
   };
 
@@ -193,7 +197,8 @@ const ProfessionalProfile: React.FC = () => {
     day: any,
     period: any,
     time: any,
-    reserved: boolean
+    reserved: boolean,
+    _confirmed:boolean
   ) => {
     const db = getDatabase();
 
