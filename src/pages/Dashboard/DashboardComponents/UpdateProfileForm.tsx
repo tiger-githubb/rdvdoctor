@@ -9,7 +9,6 @@ import {
   Flex,
   Stack,
   useColorModeValue,
-  Grid,
   Avatar,
   AvatarBadge,
   Center,
@@ -29,6 +28,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   const [file, setFile] = useState<File | null>(null);
   // eslint-disable-next-line
   const [fileUrl, setFileUrl] = useState<string | null>(null);
+  // eslint-disable-next-line
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {

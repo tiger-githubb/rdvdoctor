@@ -1,5 +1,5 @@
 import { FC, useRef, useState } from "react";
-import { Flex, Button, FormLabel, FormControl } from "@chakra-ui/react";
+import { Flex, Button, FormControl } from "@chakra-ui/react";
 import { db, auth } from "../../../services/firebase";
 import { updateDoc, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
@@ -69,8 +69,6 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
       console.error("Erreur lors de la mise à jour des informations :", error);
     }
   };
-
-
 
   return (
     <form onSubmit={handleSubmit}>
