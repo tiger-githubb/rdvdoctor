@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import {
+  AbsoluteCenter,
+  Box,
+  Divider,
+  Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from "@chakra-ui/react";
 import Profile from "./DashboardComponents/Profile";
 import UpdateProfileForm from "./DashboardComponents/UpdateProfileForm";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -45,17 +55,23 @@ const Dashboard: React.FC = () => {
   return (
     <Box p={2} mt={20}>
       <Profile userData={userData} loading={loading} />
+      <Box position="relative" padding="10">
+        <Divider />
+        <AbsoluteCenter bg="white" px="4">
+          Mise a jour 
+        </AbsoluteCenter>
+      </Box>
       <Tabs isFitted variant="enclosed">
         <TabList mb="1em">
-          <Tab>Modification des informations</Tab>
-          <Tab>Dossier Medical</Tab>
+          <Tab as='b'>Modification des informations</Tab>
+          <Tab as='b' >Dossier Medical</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
-          <UpdateProfileForm userData={userData} />
+            <UpdateProfileForm userData={userData} />
           </TabPanel>
           <TabPanel>
-          <MedicalFileUpload userData={userData} />
+            <MedicalFileUpload userData={userData} />
           </TabPanel>
         </TabPanels>
       </Tabs>

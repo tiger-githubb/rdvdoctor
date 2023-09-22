@@ -1,4 +1,13 @@
-import { Flex, Heading, Image, Stack, Text, Spinner } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  Image,
+  Stack,
+  Text,
+  Spinner,
+  Skeleton,
+  Divider,
+} from "@chakra-ui/react";
 
 interface ProfileProps {
   userData: any;
@@ -7,16 +16,23 @@ interface ProfileProps {
 
 export default function Profile({ userData, loading }: ProfileProps) {
   return (
-    <Stack maxH={"50vh"} direction={{ base: "column", md: "row" }}>
+    <Stack direction={{ base: "column", md: "row" }}>
       <Flex flex={1} p={4} ml={5}>
         {loading ? (
-          <Spinner size="lg" />
+          <Skeleton>
+            <Stack direction="row" h="400px" w="400px" p={4}>
+              <Divider orientation="vertical" />
+            </Stack>
+          </Skeleton>
         ) : (
-          <Image
-            alt={"profile"}
-            objectFit={"cover"}
-            src={userData ? userData.profile_image : ""}
-          />
+          <Stack direction="row" h="400px" w="400px" p={4}>
+            <Image
+              alt={"profile"}
+              fit={"cover"}
+              w={"100%"}
+              src={userData ? userData.profile_image : ""}
+            />
+          </Stack>
         )}
       </Flex>
       <Flex p={8} flex={3} align={"center"} justify={"left"}>
