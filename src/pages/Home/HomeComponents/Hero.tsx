@@ -16,7 +16,7 @@ export default function Hero() {
       <Stack
         align={'center'}
         spacing={{ base: 8, md: 10,lg:0  }}
-        pt={{ base: 5, md: 10 ,lg:10 }}
+        pt={{ base: 10, md: 10 ,lg:10 }}
         direction={{ base: 'column', md: 'row' }}>
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
           <Heading
