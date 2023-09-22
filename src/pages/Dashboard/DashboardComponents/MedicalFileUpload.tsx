@@ -1,7 +1,7 @@
-import { FC, useRef, useState } from "react";
-import { Flex, Button, FormControl, useToast } from "@chakra-ui/react";
-import { db, auth } from "../../../services/firebase";
-import { updateDoc, doc } from "firebase/firestore";
+import { FC, useEffect, useRef, useState } from "react";
+import { Flex, Button, FormLabel, FormControl, useToast } from "@chakra-ui/react";
+import { storage, db, auth } from "../../../services/firebase";
+import { updateDoc, doc, getFirestore } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
 
 interface MedicalFileFormProps {
@@ -9,9 +9,21 @@ interface MedicalFileFormProps {
 }
 
 const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [file, setFile] = useState<File | null>(null);  
   const toast = useToast();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [fichier, setFichier] = useState(userData?.fichier);
+
+  useEffect(() => {
+    if (userData) {
+      setFichier(userData.fichier); 
+    }
+  }, [userData]);
+
+  const initialValues = {
+    fichier: userData?.fichier,
+  };
 
   const [formValues, setFormValues] = useState<{
     fichiers: string[];
@@ -20,48 +32,17 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      console.log(e.target.files);
-      setFile(e.target.files[0]);
-    }
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      handleFileUpload()
-    } catch (error) {
-      console.error('Erreur de mise à jour doc', error)
+    if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files[0].name);
       toast({
-        title: 'Erreur',
-        description: "Impossible de mettre à jour les informations",
-        status: 'error'
-      })
-    }
-
-    try {
-      const user = auth.currentUser;
-      if (user) {
-        const userDocRef = doc(db, "users", user.uid);
-
-        if (formValues.fichiers.length !== 0) {
-          await updateDoc(userDocRef, {
-            fichiers: formValues.fichiers,
-          });
-          console.log("reussi");
-
-          toast({
-            title: "Mise a jour",
-            description: "Les informations de votre profir ont été mis a jour ",
-            status: "success",
-            position: "top-right",
-            duration: 5000,
-            isClosable: true,
-          });
-        }
-      }
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour des informations :", error);
+        title: "Dossier Medical",
+        description: " votre fichier a bien été selectioné",
+        status: "loading",
+        position: "top-right",
+        duration: 5000,
+        isClosable: true,
+      });
+      setFile(e.target.files[0]);
     }
   };
 
@@ -74,22 +55,57 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
 
       try {
         await uploadBytes(storageRef, file);
-        console.log('Fichier uploadé') 
         const downloadURL = await getDownloadURL(storageRef);
-        console.log('URL téléchargement récupérée', downloadURL)
+
+        console.log(downloadURL);
 
         setFormValues((prevValues) => ({
           fichiers: [...(prevValues.fichiers), downloadURL],
         }));
-        
       } catch (error) {
         console.error("Erreur lors de l'envoi du fichier : ", error);
-        toast({
-          title: 'Erreur',
-          description: "Impossible d'uploader le fichier",
-          status: 'error'
-        })
+        alert("Une erreur s'est produite lors de l'envoi du fichier.");
       }
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setFormValues((prev) => ({
+      ...prev,
+      fichiers: prev.fichiers,
+    }));
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+
+        if (formValues.fichiers.length !== 0) {
+          await updateDoc(userDocRef, {
+            fichiers: formValues.fichiers,
+          });
+
+          toast({
+            title: "Dossier Medical",
+            description: " Votre dossier medical a été Ajouter",
+            status: "success",
+            position: "top-right",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      }
+    } catch (error) {
+      toast({
+        title: "Dossier Medical",
+        description: " Erreur lors de la mise à jour de votre dossier medical",
+        status: "error",
+        position: "top-right",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.error("Erreur lors de la mise à jour des informations :", error);
     }
   };
 
@@ -97,7 +113,6 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-
       <Flex
         direction="column"
         width="400px"
@@ -107,27 +122,17 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
         alignItems="center"
         justifyContent="center"
       >
-        <center>
         <FormControl>
-          
-          <p></p>
-          <Button w="full" cursor="pointer" as="label" htmlFor="file">
+          <Button w="full" cursor="pointer" as="label" htmlFor="fileadd">
                     Télecharger Votre dossier Medical
           </Button>
-                  <input
-                    id="file"
-                    type="file"
-                    hidden
-                    onChange={handleFileChange}
-                    ref={fileInputRef} 
-                  />
+          <input type="file" id="fileadd" onChange={handleFileChange} hidden ref={fileInputRef} />
         </FormControl>
-        </center>
-        
       </Flex>
 
       <Button
         type="submit"
+        onClick={handleFileUpload}
         colorScheme="blue"
         mt={4}
       >
