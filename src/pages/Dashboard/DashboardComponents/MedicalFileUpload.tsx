@@ -1,5 +1,5 @@
 import { FC, useRef, useState } from "react";
-import { Flex, Button, FormControl } from "@chakra-ui/react";
+import { Flex, Button, FormControl, useToast } from "@chakra-ui/react";
 import { db, auth } from "../../../services/firebase";
 import { updateDoc, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
@@ -11,6 +11,7 @@ interface MedicalFileFormProps {
 const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);  
+  const toast = useToast();
 
   const [formValues, setFormValues] = useState<{
     fichiers: string[];
@@ -25,33 +26,18 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
     }
   };
 
-  const handleFileUpload = async () => {
-    if (file) {
-      const storageRef = ref(
-        getStorage(),
-        `Dossier_medical/${userData.uid}/${file.name}`
-      );
-
-      try {
-        await uploadBytes(storageRef, file);
-        const downloadURL = await getDownloadURL(storageRef);
-
-        console.log(downloadURL);
-
-        setFormValues((prevValues) => ({
-          fichiers: [...(prevValues.fichiers), downloadURL],
-        }));
-        
-      } catch (error) {
-        console.error("Erreur lors de l'envoi du fichier : ", error);
-        alert("Une erreur s'est produite lors de l'envoi du fichier.");
-      }
-    }
-  };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleFileUpload()
+    try {
+      handleFileUpload()
+    } catch (error) {
+      console.error('Erreur de mise à jour doc', error)
+      toast({
+        title: 'Erreur',
+        description: "Impossible de mettre à jour les informations",
+        status: 'error'
+      })
+    }
 
     try {
       const user = auth.currentUser;
@@ -62,13 +48,52 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
           await updateDoc(userDocRef, {
             fichiers: formValues.fichiers,
           });
-          console.log("Réussi");
+          console.log("reussi");
+
+          toast({
+            title: "Mise a jour",
+            description: "Les informations de votre profir ont été mis a jour ",
+            status: "success",
+            position: "top-right",
+            duration: 5000,
+            isClosable: true,
+          });
         }
       }
     } catch (error) {
       console.error("Erreur lors de la mise à jour des informations :", error);
     }
   };
+
+  const handleFileUpload = async () => {
+    if (file) {
+      const storageRef = ref(
+        getStorage(),
+        `Dossier_medical/${userData.uid}/${file.name}`
+      );
+
+      try {
+        await uploadBytes(storageRef, file);
+        console.log('Fichier uploadé') 
+        const downloadURL = await getDownloadURL(storageRef);
+        console.log('URL téléchargement récupérée', downloadURL)
+
+        setFormValues((prevValues) => ({
+          fichiers: [...(prevValues.fichiers), downloadURL],
+        }));
+        
+      } catch (error) {
+        console.error("Erreur lors de l'envoi du fichier : ", error);
+        toast({
+          title: 'Erreur',
+          description: "Impossible d'uploader le fichier",
+          status: 'error'
+        })
+      }
+    }
+  };
+
+
 
   return (
     <form onSubmit={handleSubmit}>

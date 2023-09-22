@@ -14,6 +14,7 @@ import {
   Center,
   IconButton,
   Progress,
+  useToast,
 } from "@chakra-ui/react";
 import { auth, db, storage } from "../../../services/firebase";
 import { updateDoc, doc, getFirestore } from "firebase/firestore";
@@ -30,6 +31,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   // eslint-disable-next-line
   const [uploadProgress, setUploadProgress] = useState(0);
+  const toast = useToast();
 
   const initialValues = {
     phone_number: userData?.phone_number || "",
@@ -134,7 +136,15 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
           date_of_birth: formValues.date_of_birth,
           bloodGroup: formValues.bloodGroup,
         });
-        console.log("Réussi");
+        
+        toast({
+          title: "Mise a jour",
+          description: "Les informations de votre profir ont été mis a jour ",
+          status: "success",
+          position: "top-right",
+          duration: 5000,
+          isClosable: true,
+        });
       }
     } catch (error) {
       console.error("Erreur lors de la mise à jour des informations :", error);
@@ -142,7 +152,8 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   };
 
   return (
-    <>    <Flex bg={useColorModeValue("gray.50", "gray.800")} minH={"100vh"}>
+    <>    
+    <Flex bg={useColorModeValue("gray.50", "gray.800")} minH={"100vh"}>
 
       <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6} w={"full"}>
         <Box
