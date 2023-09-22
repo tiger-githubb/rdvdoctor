@@ -3,7 +3,6 @@ import {
   AbsoluteCenter,
   Box,
   Divider,
-  Stack,
   Tab,
   TabList,
   TabPanel,

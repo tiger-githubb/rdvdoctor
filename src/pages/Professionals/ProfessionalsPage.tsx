@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Flex,
-  Heading,
   SimpleGrid,
   Container,
   Center,

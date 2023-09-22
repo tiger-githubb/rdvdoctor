@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { Flex, Button, FormLabel, FormControl, useToast, Progress } from "@chakra-ui/react";
-import { storage, db, auth } from "../../../services/firebase";
-import { updateDoc, doc, getFirestore } from "firebase/firestore";
+import { Flex, Button, FormControl, useToast, Progress } from "@chakra-ui/react";
+import { db, auth } from "../../../services/firebase";
+import { updateDoc, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, getStorage, uploadBytesResumable } from "firebase/storage";
 import { a } from "@chakra-ui/toast/dist/toast.types-24f022fd";
 
@@ -13,8 +13,11 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
   const toast = useToast();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  // eslint-disable-next-line
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  // eslint-disable-next-line
   const [fichier, setFichier] = useState(userData?.fichier);
+  // eslint-disable-next-line
   const [uploadProgress, setUploadProgress] = useState(0);
   let progressToastId: a | null = null;
   let progress = null;
@@ -24,7 +27,7 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
       setFichier(userData.fichier); 
     }
   }, [userData]);
-
+// eslint-disable-next-line
   const initialValues = {
     fichier: userData?.fichier,
   };

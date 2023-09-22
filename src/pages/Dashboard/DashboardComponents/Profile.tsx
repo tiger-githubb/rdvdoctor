@@ -4,11 +4,8 @@ import {
   Image,
   Stack,
   Text,
-  Spinner,
   Skeleton,
   Divider,
-  Box,
-  SkeletonCircle,
   SkeletonText,
 } from "@chakra-ui/react";
 
