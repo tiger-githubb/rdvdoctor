@@ -96,7 +96,7 @@ const Home: React.FC = () => {
           <Hero />
           <Features />
           <FeaturedProfessionalsSection professionalsData={professionalsData} isLoading={isLoading} />
-          <FeaturedHospitalsSection featuredHospitals={featuredHospitals} />
+          <FeaturedHospitalsSection featuredHospitals={featuredHospitals} isLoading={isLoading} />
           <CallToAction />
         </>
       
