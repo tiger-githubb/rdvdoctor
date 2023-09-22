@@ -90,17 +90,19 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <Box p={0}>
-
-        <>
-          <Hero />
-          <Features />
-          <FeaturedProfessionalsSection professionalsData={professionalsData} isLoading={isLoading} />
-          <FeaturedHospitalsSection featuredHospitals={featuredHospitals} isLoading={isLoading} />
-          <CallToAction />
-        </>
-      
-    </Box>
+    <>
+        <Hero />
+        <Features />
+        <FeaturedProfessionalsSection
+          professionalsData={professionalsData}
+          isLoading={isLoading}
+        />
+        <FeaturedHospitalsSection
+          featuredHospitals={featuredHospitals}
+          isLoading={isLoading}
+        />
+        <CallToAction />
+    </>
   );
 };
 export default Home;

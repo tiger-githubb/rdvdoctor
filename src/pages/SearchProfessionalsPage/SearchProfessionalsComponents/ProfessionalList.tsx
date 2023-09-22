@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { SimpleGrid } from '@chakra-ui/react';
+import { Container, SimpleGrid } from '@chakra-ui/react';
 import ProfesionalCard from '../../../components/ProfesionalCard';
 import { collection } from 'firebase/firestore';
 import { db } from '../../../services/firebase';
 import { getDocs } from 'firebase/firestore';
+import SkeletonCards from '../../../components/SkeletonCards';
 
 
 interface ProfessionalData {
@@ -20,19 +21,26 @@ interface ProfessionalData {
 }
 
 const ProfessionalList: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   const [professionalsData, setProfessionalsData] = useState<ProfessionalData[]>([]);
 
   const fetchProfessionalData = async () => {
     try {
+      setIsLoading(true);
       const professionalCollectionRef = collection(db, "users");
       const professionalsSnapshot = await getDocs(professionalCollectionRef);
 
       const professionalsDataArray: ProfessionalData[] = [];
       professionalsSnapshot.forEach((doc) => {
-        const professionalData = doc.data();
-        professionalsDataArray.push(professionalData as ProfessionalData);
+        const professionalData = doc.data() as ProfessionalData;
+        if (professionalData.role === 1 ) {
+          professionalsDataArray.push(professionalData);
+        }
       });
       setProfessionalsData(professionalsDataArray);
+      setIsLoading(false);
+
 
     } catch (error) {
       console.log("un probleme est survenu :", error);
@@ -44,15 +52,24 @@ const ProfessionalList: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+    <Container maxW={'6xl'} pt={{ base: 10, md: 10 ,lg:10 }}>
+      {isLoading ? (
+        <>
+        <SkeletonCards/>
+        <SkeletonCards/>
+        </>
+        
+      ):(
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
 
         {professionalsData.map((professional) => (
           <ProfesionalCard key={professional.uid} professional={professional} />
         ))}
 
       </SimpleGrid>
-    </div>
+      )}
+
+    </Container>
   );
 };
 
