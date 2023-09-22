@@ -1,8 +1,24 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { Flex, Button, FormControl, useToast, Progress } from "@chakra-ui/react";
+import {
+  Flex,
+  Button,
+  FormControl,
+  useToast,
+  Progress,
+  Image,
+  Stack,
+  Box,
+  SimpleGrid,
+} from "@chakra-ui/react";
 import { db, auth } from "../../../services/firebase";
 import { updateDoc, doc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, getStorage, uploadBytesResumable } from "firebase/storage";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  getStorage,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { a } from "@chakra-ui/toast/dist/toast.types-24f022fd";
 
 interface MedicalFileFormProps {
@@ -24,10 +40,10 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
 
   useEffect(() => {
     if (userData) {
-      setFichier(userData.fichier); 
+      setFichier(userData.fichier);
     }
   }, [userData]);
-// eslint-disable-next-line
+  // eslint-disable-next-line
   const initialValues = {
     fichier: userData?.fichier,
   };
@@ -43,7 +59,7 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
       console.log(e.target.files[0].name);
       setFile(e.target.files[0]);
       toast({
-        title: 'image : '+ e.target.files[0].name,
+        title: "image : " + e.target.files[0].name,
         description: "Votre image a été selectionné avec succes ",
         status: "info",
         position: "top-right",
@@ -62,8 +78,10 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         "state_changed",
-        (snapshot: { bytesTransferred: number; totalBytes: number; }) => {
-          progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);;
+        (snapshot: { bytesTransferred: number; totalBytes: number }) => {
+          progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
           console.log("Upload is " + progress + "% done");
           if (progressToastId) {
             toast.update(progressToastId, {
@@ -82,10 +100,11 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
               isClosable: true,
             });
           }
-          if (progress===100) {
+          if (progress === 100) {
             toast({
               title: "Mise a jour",
-              description: "Les informations de votre profil ont été mis a jour ",
+              description:
+                "Les informations de votre profil ont été mis a jour ",
               status: "success",
               position: "top-right",
               duration: 5000,
@@ -98,7 +117,7 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
             // }, 2000);
           }
         },
-        (error:any) => {
+        (error: any) => {
           console.log(error);
         },
         () => {
@@ -116,7 +135,7 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
         console.log(downloadURL);
 
         setFormValues((prevValues) => ({
-          fichiers: [...(prevValues.fichiers), downloadURL],
+          fichiers: [...prevValues.fichiers, downloadURL],
         }));
       } catch (error) {
         console.error("Erreur lors de l'envoi du fichier : ", error);
@@ -125,7 +144,6 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
     }
   };
   <Progress value={uploadProgress} />;
-
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -167,36 +185,53 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
     }
   };
 
-
-
   return (
-    <form onSubmit={handleSubmit}>
-      <Flex
-        direction="column"
-        width="400px"
-        height="300px"
-        border="2px dashed gray"
-        borderRadius={20}
-        alignItems="center"
-        justifyContent="center"
-      >
-        <FormControl>
-          <Button w="full" cursor="pointer" as="label" htmlFor="fileadd">
-                    Télecharger Votre dossier Medical
-          </Button>
-          <input type="file" id="fileadd" onChange={handleFileChange} hidden ref={fileInputRef} />
-        </FormControl>
-      </Flex>
+    <Flex justifyContent="center" alignItems="center">
+      <Box width="50%" p={4}  display="flex" justifyContent="center" alignItems="center">
+      <form onSubmit={handleSubmit}>
+        <Flex
+          direction="column"
+          width="400px"
+          height="400px"
+          border="2px dashed gray"
+          borderRadius={20}
+          alignItems="center"
+          justifyContent="center"
+        >
+          <FormControl>
+            <Button w="full" cursor="pointer" as="label" htmlFor="fileadd">
+              Télecharger Votre dossier Medical
+            </Button>
+            <input
+              type="file"
+              id="fileadd"
+              onChange={handleFileChange}
+              hidden
+              ref={fileInputRef}
+            />
+          </FormControl>
+        </Flex>
 
-      <Button
-        type="submit"
-        onClick={handleFileUpload}
-        colorScheme="blue"
-        mt={4}
-      >
-        Ajouter le document
-      </Button>
-    </form>
+        <Button
+          type="submit"
+          onClick={handleFileUpload}
+          colorScheme="blue"
+          mt={4}
+        >
+          Ajouter le document
+        </Button>
+      </form>
+      </Box>
+      <Box width="50%" p={4}  display="flex" justifyContent="center" alignItems="center">
+      <Box maxH="450px" maxW="400px" overflowY="scroll">
+        <Stack spacing={4}>
+          {userData?.fichiers?.map((imageUrl: any) => (
+            <Image key={imageUrl} src={imageUrl} alt="Document" />
+          ))}
+        </Stack>
+      </Box>
+      </Box>
+    </Flex>
   );
 };
 
