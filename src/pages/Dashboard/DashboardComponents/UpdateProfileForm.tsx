@@ -10,15 +10,15 @@ import {
   Stack,
   useColorModeValue,
   Grid,
+  Avatar,
+  AvatarBadge,
+  Center,
+  IconButton,
 } from "@chakra-ui/react";
 import { auth, db, storage } from "../../../services/firebase";
-import {
-  updateDoc,
-  doc,
-  getFirestore,
-} from "firebase/firestore";
+import { updateDoc, doc, getFirestore } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
-
+import { SmallCloseIcon } from "@chakra-ui/icons";
 
 interface UpdateProfileFormProps {
   userData: any;
@@ -59,18 +59,21 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
       setFile(e.target.files[0]);
     }
   };
-  
+
   const handleFileUpload = async () => {
     if (file) {
       const storage = getStorage();
-      const storageRef = ref(storage, `profile_images/${userData.uid}/${file.name}`);
+      const storageRef = ref(
+        storage,
+        `profile_images/${userData.uid}/${file.name}`
+      );
 
       try {
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(storageRef);
         setFileUrl(downloadURL);
         const db = getFirestore();
-        const userprofileRef = doc(db, "users",`${userData.uid}`);
+        const userprofileRef = doc(db, "users", `${userData.uid}`);
         await updateDoc(userprofileRef, { profile_image: downloadURL });
       } catch (error) {
         console.error("Erreur lors de l'envoi du fichier : ", error);
@@ -93,7 +96,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
             storageRef,
             formValues.profile_image
           );
-          
+
           const imageUrl = await getDownloadURL(snapshot.ref);
 
           const userDocRef = doc(db, "users", userData.uid);
@@ -106,7 +109,6 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
           address: formValues.address,
           date_of_birth: formValues.date_of_birth,
           bloodGroup: formValues.bloodGroup,
-          
         });
         console.log("Réussi");
       }
@@ -116,9 +118,8 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   };
 
   return (
-    <Flex bg={useColorModeValue("gray.50", "gray.800")}
-    >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+    <Flex bg={useColorModeValue("gray.50", "gray.800")} minH={"100vh"}>
+      <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6} w={"full"}>
         <Box
           rounded={"lg"}
           bg={useColorModeValue("white", "gray.700")}
@@ -126,45 +127,66 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
           p={8}
         >
           <form onSubmit={handleSubmit}>
-            <Grid templateColumns={{ sm: "1fr", md: "repeat(2, 1fr)" }} gap={4}>
-              <FormControl>
-                <FormLabel>Nom d'utilisateur</FormLabel>
-                <Input
-                  value={formValues.displayName}
-                  onChange={(e) =>
-                    setFormValues({
-                      ...formValues,
-                      displayName: e.target.value,
-                    })
-                  }
-                />
-              </FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Profile de l'utilisateur</FormLabel>
+              <Stack direction={["column", "row"]} spacing={8}>
+                <Center>
+                  <Avatar
+                    size="xl"
+                    src={userData ? userData.profile_image : ""}
+                  >
+                    <AvatarBadge
+                      as={IconButton}
+                      size="sm"
+                      rounded="full"
+                      top="-10px"
+                      colorScheme="red"
+                      aria-label="remove Image"
+                      icon={<SmallCloseIcon />}
+                    />
+                  </Avatar>
+                </Center>
+                <Center w="full">
+                  <Button w="full" cursor="pointer" as="label" htmlFor="file">
+                    Changer le profil
+                  </Button>
+                  <input
+                    id="file"
+                    type="file"
+                    hidden
+                    onChange={handleFileChange}
+                  />
+                </Center>
+              </Stack>
+            </FormControl>
 
-              <FormControl>
-                <FormLabel>Numéro de téléphone</FormLabel>
-                <Input
-                  value={formValues.phone_number}
-                  onChange={(e) =>
-                    setFormValues({
-                      ...formValues,
-                      phone_number: e.target.value,
-                    })
-                  }
-                />
-              </FormControl>
-            </Grid>
-
-            <FormControl>
-              <FormLabel>Description</FormLabel>
-              <Textarea
-                value={formValues.description}
+            <FormControl mb={4}>
+              <FormLabel>Nom d'utilisateur</FormLabel>
+              <Input
+                value={formValues.displayName}
                 onChange={(e) =>
-                  setFormValues({ ...formValues, description: e.target.value })
+                  setFormValues({
+                    ...formValues,
+                    displayName: e.target.value,
+                  })
                 }
               />
             </FormControl>
 
-            <FormControl>
+            <FormControl mb={4}>
+              <FormLabel>Numéro de téléphone</FormLabel>
+              <Input
+                value={formValues.phone_number}
+                onChange={(e) =>
+                  setFormValues({
+                    ...formValues,
+                    phone_number: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+
+            <FormControl mb={4}>
               <FormLabel>Adresse</FormLabel>
               <Input
                 value={formValues.address}
@@ -174,7 +196,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
               />
             </FormControl>
 
-            <FormControl>
+            <FormControl mb={4}>
               <FormLabel>Groupe sanguin</FormLabel>
               <Input
                 value={formValues.bloodGroup}
@@ -184,7 +206,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
               />
             </FormControl>
 
-            <FormControl>
+            <FormControl mb={4}>
               <FormLabel>Date de naissance</FormLabel>
               <Input
                 type="date"
@@ -198,14 +220,24 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
               />
             </FormControl>
 
-            <FormControl>
-              <FormLabel>Photo de profil</FormLabel>
-              <input type="file" onChange={handleFileChange} />
-
+            <FormControl mb={4}>
+              <FormLabel>Description</FormLabel>
+              <Textarea
+                value={formValues.description}
+                onChange={(e) =>
+                  setFormValues({ ...formValues, description: e.target.value })
+                }
+                w="100%"
+                minH="200px"
+              />
             </FormControl>
 
-
-            <Button type="submit" onClick={handleFileUpload} colorScheme="blue" mt={4}>
+            <Button
+              type="submit"
+              onClick={handleFileUpload}
+              colorScheme="blue"
+              mt={4}
+            >
               Mettre à jour le profil
             </Button>
           </form>
