@@ -14,10 +14,11 @@ import {
   AvatarBadge,
   Center,
   IconButton,
+  Progress,
 } from "@chakra-ui/react";
 import { auth, db, storage } from "../../../services/firebase";
 import { updateDoc, doc, getFirestore } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, getStorage, uploadBytesResumable } from "firebase/storage";
 import { SmallCloseIcon } from "@chakra-ui/icons";
 
 interface UpdateProfileFormProps {
@@ -28,6 +29,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   const [file, setFile] = useState<File | null>(null);
   // eslint-disable-next-line
   const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const initialValues = {
     phone_number: userData?.phone_number || "",
@@ -60,6 +62,10 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
     }
   };
 
+
+
+  <Progress value={uploadProgress} />
+
   const handleFileUpload = async () => {
     if (file) {
       const storage = getStorage();
@@ -67,12 +73,30 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
         storage,
         `profile_images/${userData.uid}/${file.name}`
       );
-
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on('state_changed', 
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+      }, 
+      (error) => {
+       console.log(error);
+       
+      },
+      () => {
+        
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log('File available at', downloadURL);
+        });
+      }
+    );
+    
       try {
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(storageRef);
         setFileUrl(downloadURL);
         const db = getFirestore();
+
         const userprofileRef = doc(db, "users", `${userData.uid}`);
         await updateDoc(userprofileRef, { profile_image: downloadURL });
       } catch (error) {
@@ -118,7 +142,8 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   };
 
   return (
-    <Flex bg={useColorModeValue("gray.50", "gray.800")} minH={"100vh"}>
+    <>    <Flex bg={useColorModeValue("gray.50", "gray.800")} minH={"100vh"}>
+
       <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6} w={"full"}>
         <Box
           rounded={"lg"}
@@ -244,6 +269,11 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
         </Box>
       </Stack>
     </Flex>
+    
+    <Progress />
+    <Progress value={uploadProgress}  size='xs' colorScheme='pink' />
+    </>
+
   );
 };
 
