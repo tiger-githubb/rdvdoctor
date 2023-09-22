@@ -18,8 +18,15 @@ import {
 } from "@chakra-ui/react";
 import { auth, db, storage } from "../../../services/firebase";
 import { updateDoc, doc, getFirestore } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, getStorage, uploadBytesResumable } from "firebase/storage";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  getStorage,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { SmallCloseIcon } from "@chakra-ui/icons";
+import { a } from "@chakra-ui/toast/dist/toast.types-24f022fd";
 
 interface UpdateProfileFormProps {
   userData: any;
@@ -27,6 +34,8 @@ interface UpdateProfileFormProps {
 
 const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   const [file, setFile] = useState<File | null>(null);
+  let progressToastId: a | null = null;
+  let progress = null;
   // eslint-disable-next-line
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   // eslint-disable-next-line
@@ -61,12 +70,18 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
     if (e.target.files && e.target.files[0]) {
       console.log(e.target.files[0].name);
       setFile(e.target.files[0]);
+      toast({
+        title: 'image : '+ e.target.files[0].name,
+        description: "Votre image a été selectionné avec succes ",
+        status: "info",
+        position: "top-right",
+        duration: 2000,
+        isClosable: true,
+      });
     }
   };
 
-
-
-  <Progress value={uploadProgress} />
+  <Progress value={uploadProgress} />;
 
   const handleFileUpload = async () => {
     if (file) {
@@ -76,23 +91,54 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
         `profile_images/${userData.uid}/${file.name}`
       );
       const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on('state_changed', 
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-      }, 
-      (error) => {
-       console.log(error);
-       
-      },
-      () => {
-        
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log('File available at', downloadURL);
-        });
-      }
-    );
-    
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);;
+          console.log("Upload is " + progress + "% done");
+          if (progressToastId) {
+            toast.update(progressToastId, {
+              title: "Mise à jour de votre profil",
+              description: "Mise à jour " + progress + "%",
+              status: "loading",
+              position: "top-right",
+              isClosable: true,
+            });
+          } else {
+            progressToastId = toast({
+              title: "Mise à jour de votre profil",
+              description: "Mise à jour " + progress + "%",
+              status: "loading",
+              position: "top-right",
+              isClosable: true,
+            });
+          }
+          if (progress===100) {
+            toast({
+              title: "Mise a jour",
+              description: "Les informations de votre profil ont été mis a jour ",
+              status: "success",
+              position: "top-right",
+              duration: 5000,
+              isClosable: true,
+            });
+            toast.close(progressToastId);
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+          });
+        }
+      );
+
       try {
         await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(storageRef);
@@ -136,15 +182,6 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
           date_of_birth: formValues.date_of_birth,
           bloodGroup: formValues.bloodGroup,
         });
-        
-        toast({
-          title: "Mise a jour",
-          description: "Les informations de votre profir ont été mis a jour ",
-          status: "success",
-          position: "top-right",
-          duration: 5000,
-          isClosable: true,
-        });
       }
     } catch (error) {
       console.error("Erreur lors de la mise à jour des informations :", error);
@@ -152,139 +189,140 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
   };
 
   return (
-    <>    
-    <Flex bg={useColorModeValue("gray.50", "gray.800")} minH={"100vh"}>
-
-      <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6} w={"full"}>
-        <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"lg"}
-          p={8}
-        >
-          <form onSubmit={handleSubmit}>
-            <FormControl mb={4}>
-              <FormLabel>Profile de l'utilisateur</FormLabel>
-              <Stack direction={["column", "row"]} spacing={8}>
-                <Center>
-                  <Avatar
-                    size="xl"
-                    src={userData ? userData.profile_image : ""}
-                  >
-                    <AvatarBadge
-                      as={IconButton}
-                      size="sm"
-                      rounded="full"
-                      top="-10px"
-                      colorScheme="red"
-                      aria-label="remove Image"
-                      icon={<SmallCloseIcon />}
+    <>
+      <Flex bg={useColorModeValue("gray.50", "gray.800")} minH={"100vh"}>
+        <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6} w={"full"}>
+          <Box
+            rounded={"lg"}
+            bg={useColorModeValue("white", "gray.700")}
+            boxShadow={"lg"}
+            p={8}
+          >
+            <form onSubmit={handleSubmit}>
+              <FormControl mb={4}>
+                <FormLabel>Profile de l'utilisateur</FormLabel>
+                <Stack direction={["column", "row"]} spacing={8}>
+                  <Center>
+                    <Avatar
+                      size="xl"
+                      src={userData ? userData.profile_image : ""}
+                    >
+                      <AvatarBadge
+                        as={IconButton}
+                        size="sm"
+                        rounded="full"
+                        top="-10px"
+                        colorScheme="red"
+                        aria-label="remove Image"
+                        icon={<SmallCloseIcon />}
+                      />
+                    </Avatar>
+                  </Center>
+                  <Center w="full">
+                    <Button w="full" cursor="pointer" as="label" htmlFor="file">
+                      Changer le profil
+                    </Button>
+                    <input
+                      id="file"
+                      type="file"
+                      hidden
+                      onChange={handleFileChange}
                     />
-                  </Avatar>
-                </Center>
-                <Center w="full">
-                  <Button w="full" cursor="pointer" as="label" htmlFor="file">
-                    Changer le profil
-                  </Button>
-                  <input
-                    id="file"
-                    type="file"
-                    hidden
-                    onChange={handleFileChange}
-                  />
-                </Center>
-              </Stack>
-            </FormControl>
+                  </Center>
+                </Stack>
+              </FormControl>
 
-            <FormControl mb={4}>
-              <FormLabel>Nom d'utilisateur</FormLabel>
-              <Input
-                value={formValues.displayName}
-                onChange={(e) =>
-                  setFormValues({
-                    ...formValues,
-                    displayName: e.target.value,
-                  })
-                }
-              />
-            </FormControl>
+              <FormControl mb={4}>
+                <FormLabel>Nom d'utilisateur</FormLabel>
+                <Input
+                  value={formValues.displayName}
+                  onChange={(e) =>
+                    setFormValues({
+                      ...formValues,
+                      displayName: e.target.value,
+                    })
+                  }
+                />
+              </FormControl>
 
-            <FormControl mb={4}>
-              <FormLabel>Numéro de téléphone</FormLabel>
-              <Input
-                value={formValues.phone_number}
-                onChange={(e) =>
-                  setFormValues({
-                    ...formValues,
-                    phone_number: e.target.value,
-                  })
-                }
-              />
-            </FormControl>
+              <FormControl mb={4}>
+                <FormLabel>Numéro de téléphone</FormLabel>
+                <Input
+                  value={formValues.phone_number}
+                  onChange={(e) =>
+                    setFormValues({
+                      ...formValues,
+                      phone_number: e.target.value,
+                    })
+                  }
+                />
+              </FormControl>
 
-            <FormControl mb={4}>
-              <FormLabel>Adresse</FormLabel>
-              <Input
-                value={formValues.address}
-                onChange={(e) =>
-                  setFormValues({ ...formValues, address: e.target.value })
-                }
-              />
-            </FormControl>
+              <FormControl mb={4}>
+                <FormLabel>Adresse</FormLabel>
+                <Input
+                  value={formValues.address}
+                  onChange={(e) =>
+                    setFormValues({ ...formValues, address: e.target.value })
+                  }
+                />
+              </FormControl>
 
-            <FormControl mb={4}>
-              <FormLabel>Groupe sanguin</FormLabel>
-              <Input
-                value={formValues.bloodGroup}
-                onChange={(e) =>
-                  setFormValues({ ...formValues, bloodGroup: e.target.value })
-                }
-              />
-            </FormControl>
+              <FormControl mb={4}>
+                <FormLabel>Groupe sanguin</FormLabel>
+                <Input
+                  value={formValues.bloodGroup}
+                  onChange={(e) =>
+                    setFormValues({ ...formValues, bloodGroup: e.target.value })
+                  }
+                />
+              </FormControl>
 
-            <FormControl mb={4}>
-              <FormLabel>Date de naissance</FormLabel>
-              <Input
-                type="date"
-                value={formValues.date_of_birth}
-                onChange={(e) =>
-                  setFormValues({
-                    ...formValues,
-                    date_of_birth: e.target.value,
-                  })
-                }
-              />
-            </FormControl>
+              <FormControl mb={4}>
+                <FormLabel>Date de naissance</FormLabel>
+                <Input
+                  type="date"
+                  value={formValues.date_of_birth}
+                  onChange={(e) =>
+                    setFormValues({
+                      ...formValues,
+                      date_of_birth: e.target.value,
+                    })
+                  }
+                />
+              </FormControl>
 
-            <FormControl mb={4}>
-              <FormLabel>Description</FormLabel>
-              <Textarea
-                value={formValues.description}
-                onChange={(e) =>
-                  setFormValues({ ...formValues, description: e.target.value })
-                }
-                w="100%"
-                minH="150px"
-              />
-            </FormControl>
+              <FormControl mb={4}>
+                <FormLabel>Description</FormLabel>
+                <Textarea
+                  value={formValues.description}
+                  onChange={(e) =>
+                    setFormValues({
+                      ...formValues,
+                      description: e.target.value,
+                    })
+                  }
+                  w="100%"
+                  minH="150px"
+                />
+              </FormControl>
 
-            <Button
-              type="submit"
-              onClick={handleFileUpload}
-              colorScheme="blue"
-              mt={4}
-            >
-              Mettre à jour le profil
-            </Button>
-          </form>
-        </Box>
-      </Stack>
-    </Flex>
-    
-    <Progress />
-    <Progress value={uploadProgress}  size='xs' colorScheme='pink' />
+              <Button
+                type="submit"
+                onClick={handleFileUpload}
+                colorScheme="blue"
+                mt={4}
+              >
+                Mettre à jour le profil
+              </Button>
+            </form>
+          </Box>
+        </Stack>
+      </Flex>
+
+      <Progress />
+      <Progress value={uploadProgress} size="xs" colorScheme="pink" />
     </>
-
   );
 };
 

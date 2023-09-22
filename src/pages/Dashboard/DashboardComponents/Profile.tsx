@@ -46,29 +46,29 @@ export default function Profile({ userData, loading }: ProfileProps) {
         ) : (
           <Stack spacing={2} w={"full"} maxW={"lg"}>
             <Heading as="h3" size="lg">
-              {userData ? userData.displayName : ""}
+              {userData ? userData.displayName : "indisponible"}
             </Heading>
             <Heading as="h5" size="sm">
-              {userData ? userData.email : ""}
+              {userData ? userData.email : "indisponible"}
             </Heading>
             <Heading as="h5" size="sm">
-              {userData ? userData.phone_number : "Téléphone de l'utilisateur"}
+              {userData ? userData.phone_number : "indisponible"}
             </Heading>
             <Heading as="h5" size="sm">
-              {userData ? userData.address : "Adresse de l'utilisateur"}
+              {userData ? userData.address : "indisponible"}
             </Heading>
             <Heading as="h5" size="sm">
               {userData
                 ? userData.bloodGroup
-                : "Groupe sanguin de l'utilisateur"}
+                : "indisponible"}
             </Heading>
             <Heading as="h5" size="sm">
               {userData
                 ? userData.date_of_birth
-                : "date de naissance de l'utilisateur"}
+                : "indisponible"}
             </Heading>
             <Text fontSize={{ base: "md", lg: "md" }} color={"gray.500"}>
-              {userData ? userData.description : "description de l'utilisateur"}
+              {userData ? userData.description : "indisponible"}
             </Text>
           </Stack>
         )}

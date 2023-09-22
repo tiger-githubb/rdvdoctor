@@ -1,8 +1,9 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { Flex, Button, FormLabel, FormControl, useToast } from "@chakra-ui/react";
+import { Flex, Button, FormLabel, FormControl, useToast, Progress } from "@chakra-ui/react";
 import { storage, db, auth } from "../../../services/firebase";
 import { updateDoc, doc, getFirestore } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, getStorage, uploadBytesResumable } from "firebase/storage";
+import { a } from "@chakra-ui/toast/dist/toast.types-24f022fd";
 
 interface MedicalFileFormProps {
   userData: any;
@@ -14,6 +15,9 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
   const [file, setFile] = useState<File | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [fichier, setFichier] = useState(userData?.fichier);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  let progressToastId: a | null = null;
+  let progress = null;
 
   useEffect(() => {
     if (userData) {
@@ -34,15 +38,15 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       console.log(e.target.files[0].name);
+      setFile(e.target.files[0]);
       toast({
-        title: "Dossier Medical",
-        description: " votre fichier a bien été selectioné",
-        status: "loading",
+        title: 'image : '+ e.target.files[0].name,
+        description: "Votre image a été selectionné avec succes ",
+        status: "info",
         position: "top-right",
-        duration: 5000,
+        duration: 2000,
         isClosable: true,
       });
-      setFile(e.target.files[0]);
     }
   };
 
@@ -52,9 +56,58 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
         getStorage(),
         `Dossier_medical/${userData.uid}/${file.name}`
       );
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot: { bytesTransferred: number; totalBytes: number; }) => {
+          progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);;
+          console.log("Upload is " + progress + "% done");
+          if (progressToastId) {
+            toast.update(progressToastId, {
+              title: "Mise à jour de votre profil",
+              description: "Mise à jour " + progress + "%",
+              status: "loading",
+              position: "top-right",
+              isClosable: true,
+            });
+          } else {
+            progressToastId = toast({
+              title: "Mise à jour de votre profil",
+              description: "Mise à jour " + progress + "%",
+              status: "loading",
+              position: "top-right",
+              isClosable: true,
+            });
+          }
+          if (progress===100) {
+            toast({
+              title: "Mise a jour",
+              description: "Les informations de votre profil ont été mis a jour ",
+              status: "success",
+              position: "top-right",
+              duration: 5000,
+              isClosable: true,
+            });
+            toast.close(progressToastId);
+
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 2000);
+          }
+        },
+        (error:any) => {
+          console.log(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+          });
+        }
+      );
 
       try {
         await uploadBytes(storageRef, file);
+
         const downloadURL = await getDownloadURL(storageRef);
 
         console.log(downloadURL);
@@ -68,6 +121,8 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
       }
     }
   };
+  <Progress value={uploadProgress} />;
+
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
