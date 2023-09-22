@@ -253,7 +253,7 @@ const UpdateProfileForm: FC<UpdateProfileFormProps> = ({ userData }) => {
                   setFormValues({ ...formValues, description: e.target.value })
                 }
                 w="100%"
-                minH="200px"
+                minH="150px"
               />
             </FormControl>
 

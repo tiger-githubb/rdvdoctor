@@ -10,7 +10,7 @@ interface MedicalFileFormProps {
 
 const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(null);  
 
   const [formValues, setFormValues] = useState<{
     fichiers: string[];
@@ -62,7 +62,6 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
           await updateDoc(userDocRef, {
             fichiers: formValues.fichiers,
           });
-
           console.log("Réussi");
         }
       }
@@ -75,6 +74,7 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
 
   return (
     <form onSubmit={handleSubmit}>
+
       <Flex
         direction="column"
         width="400px"
@@ -84,10 +84,23 @@ const MedicalFileUpload: FC<MedicalFileFormProps> = ({ userData }) => {
         alignItems="center"
         justifyContent="center"
       >
+        <center>
         <FormControl>
-          <FormLabel>Document de santé</FormLabel>
-          <input type="file" onChange={handleFileChange} ref={fileInputRef} />
+          
+          <p></p>
+          <Button w="full" cursor="pointer" as="label" htmlFor="file">
+                    Télecharger Votre dossier Medical
+          </Button>
+                  <input
+                    id="file"
+                    type="file"
+                    hidden
+                    onChange={handleFileChange}
+                    ref={fileInputRef} 
+                  />
         </FormControl>
+        </center>
+        
       </Flex>
 
       <Button
