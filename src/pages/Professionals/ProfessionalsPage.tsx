@@ -1,9 +1,17 @@
-import React, { useState, useEffect }  from 'react';
-import { Flex, Heading, SimpleGrid,Container } from '@chakra-ui/react';
-import ProfesionalCard from '../../components/ProfesionalCard';
-import { collection } from 'firebase/firestore';
-import { getDocs } from 'firebase/firestore';
-import { db } from '../../services/firebase';
+import React, { useState, useEffect } from "react";
+import {
+  Flex,
+  Heading,
+  SimpleGrid,
+  Container,
+  Center,
+  Divider,
+} from "@chakra-ui/react";
+import ProfesionalCard from "../../components/ProfesionalCard";
+import { collection } from "firebase/firestore";
+import { getDocs } from "firebase/firestore";
+import { db } from "../../services/firebase";
+import SkeletonCards from "../../components/SkeletonCards";
 
 export interface ProfessionalData {
   uid: string;
@@ -19,8 +27,11 @@ export interface ProfessionalData {
 }
 
 const ProfessionalsPage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [professionalsData, setProfessionalsData] = useState<ProfessionalData[]>([]);
+  const [professionalsData, setProfessionalsData] = useState<
+    ProfessionalData[]
+  >([]);
 
   const fetchProfessionalData = async () => {
     try {
@@ -29,34 +40,45 @@ const ProfessionalsPage: React.FC = () => {
 
       const professionalsDataArray: ProfessionalData[] = [];
       professionalsSnapshot.forEach((doc) => {
-        const professionalData = doc.data();
-        professionalsDataArray.push(professionalData as ProfessionalData);
+        const professionalData = doc.data() as ProfessionalData;
+        if (professionalData.role === 1) {
+          professionalsDataArray.push(professionalData);
+        }
       });
       setProfessionalsData(professionalsDataArray);
-
+      setIsLoading(false);
     } catch (error) {
       console.log("un probleme est survenu :", error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchProfessionalData();
   }, []);
- 
 
   return (
-    <Container maxW="container.xl" mt={8}>
-      <Flex justify="center" align="center" direction="column">
-        <Heading as="h1" mb={4}>
-          Liste des Professionnels
-        </Heading>
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-        {professionalsData.map((professional) => (
-        <ProfesionalCard key={professional.uid} professional={professional} />
-      ))}
-        </SimpleGrid>
-      </Flex>
-    </Container>
+    <>
+      <Center height="50px">
+        <Divider orientation="vertical" />
+      </Center>
+      <Container maxW={"6xl"} pt={{ base: 30, md: 30, lg: 30 }}>
+        {isLoading ? (
+          <>
+            <SkeletonCards />
+            <SkeletonCards />
+          </>
+        ) : (
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+            {professionalsData.map((professional) => (
+              <ProfesionalCard
+                key={professional.uid}
+                professional={professional}
+              />
+            ))}
+          </SimpleGrid>
+        )}
+      </Container>
+    </>
   );
 };
 
