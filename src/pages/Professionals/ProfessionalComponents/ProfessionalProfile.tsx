@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 
 import {
   Box,
@@ -33,18 +33,26 @@ moment.locale("fr");
 
 interface Slot {
   reserved: boolean;
-  confirmed:boolean;
+  confirmed: boolean;
   reservedBy: string | null;
+  userName: string | null;
+}
+interface ProfileProps {
+  userData: any;
+  loading: boolean;
 }
 
-const ProfessionalProfile: React.FC = () => {
+const ProfessionalProfile: FC<ProfileProps> = ({userData }) => {
   const toast = useToast();
   const auth = getAuth();
   const user = auth.currentUser;
   const currentUserUid = user ? user.uid : null;
+  const currentUserName = userData ? userData?.displayName : null;
   const [professional, setProfessional] = useState<ProfessionalData | null>(
     null
   );
+    console.log(currentUserName);
+    
   const { uid } = useParams<{ uid: string }>();
   const [availabilityData, setAvailabilityData] = useState<any | null>(null);
 
@@ -91,10 +99,11 @@ const ProfessionalProfile: React.FC = () => {
     time: string,
     slot: Slot
   ) => {
-    const { reserved, reservedBy } = slot;
+    const { reserved, reservedBy, userName } = slot;
     let updatedSlot: Slot;
     const auth = getAuth();
     const user = auth.currentUser;
+    console.log(userName);
 
     if (!user) {
       toast({
@@ -124,8 +133,9 @@ const ProfessionalProfile: React.FC = () => {
       updatedSlot = {
         ...slot,
         reserved: false,
-        confirmed:false,
+        confirmed: false,
         reservedBy: null,
+        userName: null,
       };
       toast({
         title: "Annulation",
@@ -139,8 +149,9 @@ const ProfessionalProfile: React.FC = () => {
       updatedSlot = {
         ...slot,
         reserved: !reserved,
-        confirmed:false,
+        confirmed: false,
         reservedBy: currentUserUid,
+        userName: currentUserName,
       };
       toast({
         title: "valider",
@@ -198,7 +209,7 @@ const ProfessionalProfile: React.FC = () => {
     period: any,
     time: any,
     reserved: boolean,
-    _confirmed:boolean
+    _confirmed: boolean
   ) => {
     const db = getDatabase();
 
@@ -249,10 +260,10 @@ const ProfessionalProfile: React.FC = () => {
                   {professional.speciality}
                 </Text>
                 <Text fontWeight={400} color={"gray.500"} fontSize={"xl"}>
-                {professional.email}
+                  {professional.email}
                 </Text>
                 <Text fontWeight={400} color={"gray.500"} fontSize={"xl"}>
-                {professional.address}
+                  {professional.address}
                 </Text>
               </Box>
 
@@ -315,8 +326,8 @@ const ProfessionalProfile: React.FC = () => {
                                 )}
                               </List>
                               <List spacing={2}>
-                              <Text fontWeight="bold">Soir:</Text>
-                              {Object.entries(slots.soir.creneaux).map(
+                                <Text fontWeight="bold">Soir:</Text>
+                                {Object.entries(slots.soir.creneaux).map(
                                   ([time, slot]: [string, any]) => (
                                     <Button
                                       key={time}
